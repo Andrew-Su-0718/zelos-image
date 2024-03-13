@@ -1,7 +1,6 @@
 name: mmdet3.1.0
 channels:
   - pytorch
-  - http://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
   - conda-forge
 dependencies:
   - _libgcc_mutex=0.1=main
