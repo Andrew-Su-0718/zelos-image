@@ -1,6 +1,7 @@
 name: mmdet3.1.0
 channels:
   - pytorch
+  - http://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
   - conda-forge
 dependencies:
   - _libgcc_mutex=0.1=main
@@ -298,4 +299,4 @@ dependencies:
     - widgetsnbextension==4.0.8
     - yapf==0.40.1
     - zipp==3.16.2
-prefix: /home/jovyan/.conda/envs/mmdet3.1.0
+prefix: /opt/conda/envs/mmdet3.1.0
