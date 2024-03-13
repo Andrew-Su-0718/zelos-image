@@ -275,7 +275,7 @@ dependencies:
     - tenacity==8.2.3
     - tensorboard==2.14.0
     - tensorboard-data-server==0.7.1
-    - tensorrt==8.0.1.6
+#    - tensorrt==8.0.1.6
     - termcolor==2.3.0
     - terminado==0.17.1
     - terminaltables==3.1.10
