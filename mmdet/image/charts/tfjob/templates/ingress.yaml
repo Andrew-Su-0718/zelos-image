@@ -1,0 +1,25 @@
+{{- if .Values.ingress -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-tfjob
+  annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+  labels:
+    app: {{ template "tfjob.name" . }}
+    chart: {{ template "tfjob.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    role: tensorboard
+    createdBy: "TFJob"
+    group-name: kubeflow.org
+    tf-job-name: { { .Release.Name } }
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /{{ .Release.Name }}-tfjob
+            backend:
+              serviceName: {{ .Release.Name }}-tensorboard
+              servicePort: 6006
+{{- end }}

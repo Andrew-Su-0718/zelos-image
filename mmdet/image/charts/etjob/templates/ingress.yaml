@@ -1,0 +1,22 @@
+{{- if .Values.ingress -}}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-etjob
+  annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+  labels:
+    app: {{ .Values.trainingType }}
+    chart: {{ template "etjob.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    createdBy: {{ .Values.trainingType }}
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /{{ .Release.Name }}-etjob
+            backend:
+              serviceName: {{ .Release.Name }}-tensorboard
+              servicePort: 6006
+{{- end }}

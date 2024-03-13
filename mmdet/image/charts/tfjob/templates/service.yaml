@@ -1,0 +1,29 @@
+{{- if (not .Values.enableGangScheduler) -}}
+{{- if .Values.useTensorboard }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-tensorboard
+  labels:
+    app: {{ template "tfjob.name" . }}
+    chart: {{ template "tfjob.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    role: tensorboard
+    createdBy: "TFJob"
+    group-name: kubeflow.org
+    tf-job-name: {{ .Release.Name }}
+spec:
+  type: {{ .Values.tensorboardServiceType }}
+  ports:
+    - port: 6006
+      targetPort: 6006
+      protocol: TCP
+      name: tensorboard
+  selector:
+    app: {{ template "tfjob.name" . }}
+    chart: {{ template "tfjob.chart" . }}
+    release: {{ .Release.Name }}
+    role: tensorboard
+{{- end }}
+{{- end }}

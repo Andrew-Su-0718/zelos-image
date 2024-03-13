@@ -1,0 +1,189 @@
+{{- $gpuCount := .Values.gpuCount -}}
+{{- $syncMode := .Values.syncMode -}}
+{{- $gpuMemory := .Values.gpuMemory -}}
+{{- $gpuCore := .Values.gpuCore -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: {{ template "modeljob.chart" . }}
+    app: {{ template "modeljob.name" . }}
+    type: {{ .Values.type }}
+    createdBy: "ModelJob"
+  {{- range $key, $value := .Values.labels }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }}
+  annotations:
+    "helm.sh/created": {{ now | unixEpoch | quote }}
+  {{- range $key, $value := .Values.annotations }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }}
+spec:
+  manualSelector: true
+  selector:
+    matchLabels:
+      release: {{ .Release.Name | quote }}
+      app: {{ template "modeljob.name" . }}
+      type: {{ .Values.type }}
+  template:
+    metadata:
+      annotations:
+      {{- range $key, $value := .Values.annotations }}
+        {{ $key }}: {{ $value | quote }}
+      {{- end }}
+      labels:
+        heritage: {{ .Release.Service | quote }}
+        release: {{ .Release.Name | quote }}
+        chart: {{ template "modeljob.chart" . }}
+        app: {{ template "modeljob.name" . }}
+        type: {{ .Values.type }}
+      {{- range $key, $value := .Values.labels }}
+        {{ $key }}: {{ $value | quote }}
+      {{- end }}
+    spec:
+      restartPolicy: Never
+      {{- if ne (len .Values.nodeSelectors) 0 }}
+      nodeSelector:
+      {{- range $nodeKey,$nodeVal := .Values.nodeSelectors }}
+        {{ $nodeKey }}: "{{ $nodeVal }}"
+      {{- end }}
+      {{- end }}
+      {{- if .Values.schedulerName }}
+      schedulerName: {{ .Values.schedulerName }}
+      {{- end }}
+      {{- if ne (len .Values.tolerations) 0 }}
+      tolerations:
+      {{- range $tolerationKey := .Values.tolerations }}
+      - {{- if $tolerationKey.key }}
+        key: "{{ $tolerationKey.key }}"
+        {{- end }}
+        {{- if $tolerationKey.value }}
+        value: "{{ $tolerationKey.value }}"
+        {{- end }}
+        {{- if $tolerationKey.effect }}
+        effect: "{{ $tolerationKey.effect }}"
+        {{- end }}
+        {{- if $tolerationKey.operator }}
+        operator: "{{ $tolerationKey.operator }}"
+        {{- end }}
+      {{- end }}
+      {{- end }}
+      {{- if .Values.syncMode }}
+      initContainers:
+        - name: init-code
+          {{- if .Values.syncImage }}
+          image: "{{ .Values.syncImage }}"
+          {{- else }}
+          {{- if eq .Values.syncMode "rsync" }}
+          image: "{{ .Values.rsyncImage }}"
+          {{- end }}
+          {{- if eq .Values.syncMode "git" }}
+          image: "{{ .Values.gitImage }}"
+          {{- end }}
+          {{- end }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          {{- if eq "rsync" $syncMode }}
+          command: [ "rsync", "-avP", "{{ .Values.syncSource}}", "/code" ]
+          {{- end }}
+          resources:
+            requests:
+              {{- if .Values.cpu }}
+              cpu: {{ .Values.cpu | quote }}
+              {{- end }}
+              {{- if .Values.memory }}
+              memory: {{ .Values.memory | quote }}
+              {{- end }}
+            limits:
+              {{- if .Values.cpu }}
+              cpu: {{ .Values.cpu | quote }}
+              {{- end }}
+              {{- if .Values.memory }}
+              memory: {{ .Values.memory | quote }}
+              {{- end }}
+          env:
+          {{- range $key, $value := .Values.envs }}
+          - name: "{{ $key }}"
+            value: "{{ $value }}"
+          {{- end }}
+          {{- if eq "git" $syncMode }}
+          - name: GIT_SYNC_REPO
+            value: {{ .Values.syncSource }}
+          - name: GIT_SYNC_DEST
+            value: {{ .Values.syncGitProjectName }}
+          - name: GIT_SYNC_ROOT
+            value: /code
+          - name: GIT_SYNC_ONE_TIME
+            value: "true"
+          {{- end }}
+          volumeMounts:
+            - name: code-sync
+              mountPath: /code
+        {{- end }}
+        {{- if ne (len .Values.imagePullSecrets) 0 }}
+        imagePullSecrets:
+        {{- range $imagePullSecret := .Values.imagePullSecrets }}
+        - name: "{{ $imagePullSecret }}"
+        {{- end }}
+        {{- end }}
+      containers:
+        - name: modeljob
+          {{- if .Values.image }}
+          image: "{{ .Values.image }}"
+          {{- end }}
+          {{- if .Values.imagePullPolicy }}
+          imagePullPolicy: "{{ .Values.imagePullPolicy }}"
+          {{- end }}
+          env:
+          {{- if .Values.envs }}
+          {{- range $key, $value := .Values.envs }}
+          - name: "{{ $key }}"
+            value: "{{ $value }}"
+          {{- end }}
+          {{- end }}
+          command:
+            - "{{ .Values.shell }}"
+            - "-c"
+            - "{{ .Values.command }}"
+          resources:
+            limits:
+              {{- if .Values.cpu }}
+              cpu: {{ .Values.cpu }}
+              {{- end }}
+              {{- if .Values.memory }}
+              memory: {{ .Values.memory }}
+              {{- end }}
+              {{- if gt (int $gpuCount) 0}}
+              nvidia.com/gpu: {{ .Values.gpuCount }}
+              {{- end }}
+              {{ - if gt (int $gpuMemory) 0 }}
+              aliyun.com/gpu-mem: { { .Values.gpuMemory }}
+              {{ - end } }
+              {{ - if gt (int $gpuCore) 0 }}
+              aliyun.com/gpu-core.percentage: {{ .Values.gpuCore }}
+              {{ - end }}
+          volumeMounts:
+            {{- if .Values.dataset }}
+            {{- range $pvcName, $mntPath := .Values.dataset}}
+            - name: "{{ $pvcName }}"
+              mountPath: "{{ $mntPath }}"
+            {{- end }}
+            {{- end }}
+            {{ if .Values.syncMode }}
+            - name: code-sync
+              mountPath: /code
+            {{- end }}
+      volumes:
+        {{- if .Values.dataset }}
+        {{- range $pvcName, $mntPath := .Values.dataset}}
+        - name: "{{ $pvcName }}"
+          persistentVolumeClaim:
+            claimName: "{{ $pvcName }}"
+        {{- end }}
+        {{- end }}
+        {{ if .Values.syncMode }}
+        - name: code-sync
+          emptyDir: {}
+        {{ end }}

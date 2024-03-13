@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "nvidia-triton-server.fullname" . }}
+  labels:
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: {{ template "nvidia-triton-server.chart" . }}
+    app: {{ template "nvidia-triton-server.name" . }}
+    servingName: {{ .Values.servingName }}
+    servingType: "triton-serving"
+    servingVersion: "{{ .Values.servingVersion }}"
+  {{- range $key, $value := .Values.labels }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }}
+spec:
+  type: {{ .Values.serviceType }}
+  ports:
+    - name: http-serving
+      port: {{ .Values.httpPort }}
+      targetPort: {{ .Values.httpPort }}
+    - name: grpc-serving
+      port: {{ .Values.grpcPort }}
+      targetPort: {{ .Values.grpcPort }}
+    {{- if .Values.allowMetrics }}
+    - name: http-metrics
+      port: {{ .Values.metricsPort }}
+      targetPort: {{ .Values.metricsPort }}
+    {{- end }}
+  selector:
+    release: {{ .Release.Name | quote }}
+    app: {{ template "nvidia-triton-server.name" . }}
