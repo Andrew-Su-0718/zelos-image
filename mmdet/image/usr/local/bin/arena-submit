@@ -1,0 +1,124 @@
+#!/bin/bash
+set -e
+TEMPDIR=$( mktemp -d )
+
+trap "{ rm -rf $TEMPDIR ; }" EXIT
+
+function help() {
+    echo -e "
+Usage:
+
+    arena-submit.sh [OPTION1] [OPTION2] ...
+
+Options:
+    --config <CONFIG_FILE>                     Specify the config file
+
+"
+}
+
+function run() {
+    job_type=pytorch
+    # datasets=("perception-fs:/home/jovyan/perception" "workspace-anzhe-su:/home/jovyan/job" "devops-fs:/home/jovyan/devops-fs")
+    datasets=("perception-fs:/home/jovyan/perception-fs" "tensorboard:/home/jovyan/tensorboard" "task-data:/home/jovyan/taski-data")
+    shell="bash"
+    selector="dist-train=true"
+    sync_source_ip=`tail -1 /etc/hosts | awk '{print $1}'`
+
+    prefix="--data="
+    data_params=""
+    for item in "${datasets[@]}"; do
+        data_params+="${prefix}${item} "
+    done
+    echo "${data_param}"
+
+    if [ ${tensorboard_logdir} ];then
+        tb_params="--tensorboard --logdir=${tensorboard_logdir}"
+    fi
+
+    arena \
+    --loglevel info \
+    submit ${job_type} \
+    --name=${job_name} \
+    --gpus=${gpus_per_node} \
+    --cpu=${cpus_per_node} \
+    --memory=${memory_per_node} \
+    --workers=${nodes} \
+    --image=${image} \
+    --sync-mode=rsync \
+    --sync-source=${sync_source_ip}::${sync_source_path} \
+    --working-dir=/home/jovyan \
+    ${data_params} \
+    --shell=${shell} \
+    --selector=${selector} \
+    --hostIPC \
+    ${tb_params} \
+    ${cmd}
+}
+
+function load_config() {
+  filename=$1
+  # cat "$filename" | while read -r line; do
+  #   variable="$line"
+  # done
+  if [ -f $filename ]; then
+      source $filename
+  else
+      logger error "config file doesn't exist!"
+  fi
+  
+  check_variable $nodes "nodes"
+  check_variable $gpus_per_node "gpus_per_node"
+  check_variable $cpus_per_node "cpus_per_node"
+  check_variable $memory_per_node "memory_per_node"
+  check_variable $job_name "job_name"
+  check_variable $image "image"
+  check_variable $cmd "cmd"
+  check_variable $sync_source_path "sync_source_path"
+}
+
+function check_variable() {
+    if [ -z $1 ]; then
+        logger error "variable <$2> must be specified!"
+        exit 1
+    fi
+}
+
+
+function parse_args() {
+    while
+                [[ $# -gt 0 ]]
+        do
+                key="$1"
+
+        case $key in
+        --config)
+            load_config $2
+            shift
+            ;;
+        *)
+                        # unknown option
+            logger error "unkonw option [$key]"
+            help
+            exit 3
+            ;;
+        esac
+        shift
+    done
+}
+
+function logger() {
+    timestr=$(date +"%Y-%m-%d/%H:%M:%S")
+    level=$(echo $1 | tr 'a-z' 'A-Z')
+    echo ${timestr}"  "${level}"  "$2
+}
+
+function main() {
+    if [[ "$@" == "" ]];then
+        help
+        exit 1
+    fi
+    parse_args "$@"
+    run
+}
+
+main "$@"

@@ -1,0 +1,39 @@
+### 0.0.1
+
+* support pytorch operator
+
+### 0.1.0
+
+* support imagePullSecrets
+
+### 0.1.1 
+
+* support gang
+ 
+### 0.1.2
+
+* fix bug for supporting gang
+
+### 0.2.0
+
+* support job labels and annotations
+
+### 0.2.1
+
+* add --shell to specify sh or bash
+
+### 0.3.0
+
+* change restartPolicy to OnFailure
+
+### 0.4.0
+
+* change image repo from kube-ai to acs
+
+### 0.5.0
+
+* Support ActiveDeadlineSeconds,TTLSecondsAfterFinished
+
+### 0.5.1
+
+* Add service labels

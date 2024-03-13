@@ -1,0 +1,142 @@
+# Default values for arena-artifacts.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# global configuration for all subcharts
+global:
+  # pull image by aliyun vpc network
+  pullImageByVPCNetwork: false
+  # the prefix of all image
+  imagePrefix: registry.cn-zhangjiakou.aliyuncs.com
+  # the cluster type
+  clusterProfile: "Default"
+  # specfiy the nodeSelector for all operator pods
+  nodeSelector: {}
+  namespace: "arena-system"
+
+# arena binary installer
+binary:
+  enabled: false
+  masterCount: 3
+  retry: 3
+  hostNetwork: true
+  rdma: true
+  image: acs/arena-deploy-manager
+  tag: latest
+  imagePullPolicy: IfNotPresent
+
+# tf-operator
+tf:
+  enabled: true
+  image: acs/tf_operator
+  tag: v1.0-aliyun-cfb1239
+  imagePullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: 200m
+      memory: 2Gi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  nodeSelector: {}
+# tf-dashboard
+tfdashboard:
+  enabled: true
+  image: acs/tf_operator
+  tag: v1.0-aliyun-cfb1239
+  imagePullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: 200m
+      memory: 2Gi
+    requests:
+      cpu: 50m
+      memory: 256Mi
+  nodeSelector: {}
+
+# mpi-operator
+mpi:
+  enabled: true
+  image: acs/mpi-operator
+  tag: v0.1.0-aliyun-e94b924
+  kubectlDelivery:
+    image: acs/kubectl-delivery
+    tag: v0.1.0
+  imagePullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: 200m
+      memory: 2Gi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  nodeSelector: {}
+
+# pytorch-operator
+pytorch:
+  enabled: true
+  image: acs/pytorch-operator
+  tag: v1.0-aliyun-5ab19b0
+  imagePullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: 200m
+      memory: 2Gi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  nodeSelector: {}
+
+# et-operator
+et:
+  enabled: true
+  createSSHSecret: false
+  image: acs/et-operator
+  tag: v0.1.4-aliyun-cd9163f
+  imagePullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: 200m
+      memory: 2Gi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  nodeSelector: {}
+
+# cron-operator
+cron:
+  enabled: true
+  image: acs/cron-operator
+  tag: v0.1.1
+  imagePullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: 200m
+      memory: 2Gi
+    requests:
+      cpu: 100m
+      memory: 256Mi
+  nodeSelector: {}
+
+# gpu-exporter
+exporter:
+  enabled: false
+  image: acs/gpu-prometheus-exporter
+  tag: v1.0.1-b2c2f9b
+  imagePullPolicy: IfNotPresent
+  resources: {}
+
+# elastic-job-supervisor
+elastic-job-supervisor:
+  enabled: true
+  image: acs/elastic-job-supervisor
+  tag: v0.1.1-71871cc-aliyun
+  imagePullPolicy: IfNotPresent
+  resources:
+    limits:
+      cpu: 300m
+      memory: 500Mi
+    requests:
+      cpu: 100m
+      memory: 300Mi
+  nodeSelector: {}

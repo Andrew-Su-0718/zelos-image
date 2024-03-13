@@ -1,0 +1,67 @@
+{{- $gpuCount := .Values.gpuCount -}}
+{{- $gpuMemory := .Values.gpuMemory -}}
+{{- $gpuCore := .Values.gpuCore -}}
+apiVersion: machinelearning.seldon.io/v1
+kind: SeldonDeployment
+metadata:
+  labels:
+  {{- range $key, $value := .Values.labels }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }}
+  annotations:
+  {{- range $key, $value := .Values.annotations }}
+    {{ $key }}: {{ $value | quote }}
+  {{- end }} 
+  name: {{ .Values.servingName }}
+  namespace: {{ .Values.namespace }}
+spec:
+  predictors:
+    - componentSpecs:
+      - spec:
+          containers:
+            - name: inference
+              resources:
+                limits:
+                  {{- if .Values.cpu }}
+                  cpu: {{ .Values.cpu }}
+                  {{- end }}
+                  {{- if .Values.memory }}
+                  memory: {{ .Values.memory }}
+                  {{- end }}
+                  {{- if gt (int $gpuCount) 0 }}
+                  nvidia.com/gpu: {{ .Values.gpuCount }}
+                  {{- end }}
+                requests:
+                  {{- if .Values.cpu }}
+                  cpu: {{ .Values.cpu }}
+                  {{- end }}
+                  {{- if .Values.memory }}
+                  memory: {{ .Values.memory }}
+                  {{- end }}
+                  {{- if gt (int $gpuCount) 0 }}
+                  nvidia.com/gpu: {{ .Values.gpuCount }}
+                  {{- end }}
+                  {{ - if gt (int $gpuMemory) 0 }}
+                  aliyun.com/gpu-mem: {{ .Values.gpuMemory }}
+                  {{ - end } }
+                  {{ - if gt (int $gpuCore) 0 }}
+                  aliyun.com/gpu-core.percentage: {{ .Values.gpuCore }}
+                  {{ - end }}
+      graph:
+        implementation: {{ .Values.implementation }}
+        modelUri: {{ .Values.modelUri }}
+        name: inference
+      name: default
+      replicas: {{ .Values.replicas }}
+      labels:
+        servingName: "{{ .Values.servingName }}"
+        serviceName: "{{ .Values.servingName }}"
+        servingType: seldon-serving
+        servingVersion: "{{ .Values.servingVersion }}"
+      {{- range $key, $value := .Values.labels }}
+        {{ $key }}: {{ $value | quote }}
+      {{- end }}
+      annotations:
+      {{- range $key, $value := .Values.annotations }}
+        {{ $key }}: {{ $value | quote }}
+      {{- end }}  
