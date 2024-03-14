@@ -29,3 +29,4 @@ USER $NB_USER
 ENV NB_PREFIX /
 
 ENTRYPOINT ["/startup.sh"]
+

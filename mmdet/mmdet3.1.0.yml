@@ -1,6 +1,7 @@
 name: mmdet3.1.0
 channels:
   - pytorch
+  - http://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
   - conda-forge
 dependencies:
   - _libgcc_mutex=0.1=main
@@ -240,7 +241,7 @@ dependencies:
     - python-dateutil==2.8.2
     - python-json-logger==2.0.7
     - pytools==2023.1.1
-    - pytorch-quantization==2.1.1
+    - pytorch-quantization==2.1.3
     - pytz==2023.3
     - pywavelets==1.4.1
     - pyyaml==6.0.1
@@ -274,7 +275,7 @@ dependencies:
     - tenacity==8.2.3
     - tensorboard==2.14.0
     - tensorboard-data-server==0.7.1
-    - tensorrt==8.0.1.6
+#    - tensorrt==8.0.1.6
     - termcolor==2.3.0
     - terminado==0.17.1
     - terminaltables==3.1.10
@@ -298,4 +299,4 @@ dependencies:
     - widgetsnbextension==4.0.8
     - yapf==0.40.1
     - zipp==3.16.2
-prefix: /home/jovyan/.conda/envs/mmdet3.1.0
+prefix: /opt/conda/envs/mmdet3.1.0
