@@ -41,7 +41,7 @@ jobs:
     - name: Delete huge unnecessary tools folder
       run: rm -rf /opt/hostedtoolcache
     - name: Build Docker images
-      run: docker build -f mmdet/mmdet.Dockerfile -t saz0568/zelos-image:pytorch${{ env.VERSION }} .
+      run: docker build -f map/yangsong.Dockerfile -t saz0568/zelos-image:pytorch${{ env.VERSION }} .
     - name: Push Docker images
       run: docker push saz0568/zelos-image:mmdet_${{ env.VERSION }}
     - name: Log in to zelos Harbor
