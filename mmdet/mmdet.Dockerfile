@@ -15,13 +15,18 @@ FROM $BASE_IMG
 
 USER $SYS_USER
 
-ADD mmdet/mmdet3.1.0.yml /opt
+# ADD mmdet/mmdet3.1.0.yml /opt
 ADD pkgs /opt/conda/envs/mmdet3.1.0/lib/python3.8/site-packages
+RUN /opt/conda/bin/conda create --name mmdet3.1.0 python=3.8 -y && /opt/conda/bin/conda clean --all
+RUN /opt/conda/bin/conda activate mmdet3.1.0 && conda install pytorch==1.12.1 torchvision==0.13.1 cudatoolkit=11.3 -c pytorch && conda clean --all
+RUN pip install -U openmim==0.3.9 && pip cache purge && rm -rf ~/.cache/pip
+RUN mim install mmengine mmdet==3.1.0 mmdet3d==1.3.0 && pip cache purge && rm -rf ~/.cache/pip
+RUN pip install jupyter==1.0.0 && && pip cache purge && rm -rf ~/.cache/pip
 
 RUN wget http://101.34.36.92/download/arena_bin.tar -O /tmp/arena_bin.tar && \
   tar -xvf /tmp/arena_bin.tar -C /usr/local/bin/ && \
   rm /tmp/arena_bin.tar
-RUN /opt/conda/bin/conda env create -f /opt/mmdet3.1.0.yml
+# RUN /opt/conda/bin/conda env create -f /opt/mmdet3.1.0.yml
 
 ADD mmdet/image /
 
