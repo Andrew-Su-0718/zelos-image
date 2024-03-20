@@ -58,7 +58,7 @@ RUN wget -O ~/miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-latest
  && chmod +x ~/miniconda.sh \
  && ~/miniconda.sh -b -p /opt/conda \
  && rm ~/miniconda.sh \
- && conda update conda
+ && conda update conda -y
 ENV CONDA_AUTO_UPDATE_CONDA=false
 
 # RUN conda config --add channels https://mirrors.bfsu.edu.cn/anaconda/pkgs/free/ && \
