@@ -16,7 +16,7 @@ on:
     ]
 
 env:
-  VERSION: 1.12.1-trt8.5-cudnn8.7-cu11.6
+  VERSION: 1.13.1-trt8.5-cudnn8.6-cu11.8
 
 jobs:
   build:
