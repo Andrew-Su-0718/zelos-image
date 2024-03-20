@@ -58,7 +58,7 @@ RUN wget -O ~/miniconda.sh https://repo.continuum.io/miniconda/Miniconda3-latest
  && chmod +x ~/miniconda.sh \
  && ~/miniconda.sh -b -p /opt/conda \
  && rm ~/miniconda.sh \
- && conda update conda
+ && conda update conda -y
 ENV CONDA_AUTO_UPDATE_CONDA=false
 
 # RUN conda config --add channels https://mirrors.bfsu.edu.cn/anaconda/pkgs/free/ && \
@@ -77,6 +77,7 @@ ENV CONDA_PREFIX=/opt/conda/envs/$CONDA_DEFAULT_ENV
 ENV PATH=$CONDA_PREFIX/bin:$PATH
 SHELL ["conda", "run", "-n", "python38", "/bin/bash", "-c"]
 
-RUN pip install torch==1.12.1+cu116 torchvision==0.13.1+cu116 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu116 && rm -rf /root/.cache/pip
+# RUN pip install torch==1.12.1+cu116 torchvision==0.13.1+cu116 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu116 && rm -rf /root/.cache/pip
+RUN conda install pytorch==1.13.1 torchvision==0.14.1 pytorch-cuda=11.7 -c pytorch -c nvidia && conda clean --all
 RUN pip install --upgrade tensorrt && rm -rf /root/.cache/pip
 
