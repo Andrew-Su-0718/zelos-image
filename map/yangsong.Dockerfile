@@ -78,6 +78,6 @@ ENV PATH=$CONDA_PREFIX/bin:$PATH
 SHELL ["conda", "run", "-n", "python38", "/bin/bash", "-c"]
 
 # RUN pip install torch==1.12.1+cu116 torchvision==0.13.1+cu116 torchaudio==0.12.1 --extra-index-url https://download.pytorch.org/whl/cu116 && rm -rf /root/.cache/pip
-RUN conda install pytorch==1.13.1 torchvision==0.13.1 cudatoolkit=11.7 -c pytorch && conda clean --all
+RUN conda install pytorch==1.13.1 torchvision==0.14.1 pytorch-cuda=11.7 -c pytorch -c nvidia && conda clean --all
 RUN pip install --upgrade tensorrt && rm -rf /root/.cache/pip
 
