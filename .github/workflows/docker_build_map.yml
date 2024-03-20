@@ -34,7 +34,7 @@ jobs:
     - name: Build Docker images
       run: docker build -f map/yangsong.Dockerfile -t saz0568/zelos-image:pytorch${{ env.VERSION }} .
     - name: Push Docker images
-      run: docker push saz0568/zelos-image:mmdet_${{ env.VERSION }}
+      run: docker push saz0568/zelos-image:pytorch${{ env.VERSION }}
   publish:
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.merged == true }}
