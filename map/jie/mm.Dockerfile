@@ -47,6 +47,6 @@ ENV PATH=$CONDA_PREFIX/bin:$PATH
 SHELL ["conda", "run", "-n", "lanesegnet", "/bin/bash", "-c"]
 
 RUN pip install torch==2.0.0+cu118 torchvision==0.15.0+cu118 -f https://download.pytorch.org/whl/torch_stable.html && pip cache purge && rm -rf /root/.cache/pip
-RUN pip install -U openmim opencv-python-headless && pip cache purge && rm -rf /root/.cache/pip
-RUN mim install mmcv-full==1.6.0 mmcls==0.25.0 mmdet==2.26.0 mmdet3d==1.0.0rc6 mmsegmentation==0.29.1 && pip cache purge && rm -rf /root/.cache/pip
+RUN pip install -U openmim && pip cache purge && rm -rf /root/.cache/pip
+RUN mim install mmcv-full==1.6.0 mmcls==0.25.0 mmdet==2.26.0 mmdet3d==1.0.0rc6 mmsegmentation==0.29.1 opencv-python-headless && pip cache purge && rm -rf /root/.cache/pip
 
