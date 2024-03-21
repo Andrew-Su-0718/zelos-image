@@ -1,0 +1,57 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+    paths: [
+      "map/yangsong/**",
+      ".github/workflows/docker_build_map_yangsong.yml",
+    ]
+  pull_request:
+    branches: [ "main" ]
+    types: [opened, synchronize, closed]
+    paths: [
+      "map/yangsong/**",
+      ".github/workflows/docker_build_map_yangsong.yml",
+    ]
+
+env:
+  VERSION: 1.13.1-trt8.5-cudnn8.7-cu11.8
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2.1.0
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    - name: Delete huge unnecessary tools folder
+      run: rm -rf /opt/hostedtoolcache
+    - name: Build Docker images
+      run: docker build -f map/yangsong/yangsong.Dockerfile -t saz0568/zelos-image:pytorch${{ env.VERSION }} .
+    - name: Push Docker images
+      run: docker push saz0568/zelos-image:pytorch${{ env.VERSION }}
+  publish:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.merged == true }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2.1.0
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    - name: Delete huge unnecessary tools folder
+      run: rm -rf /opt/hostedtoolcache
+    - name: Pull Docker image from DockerHub
+      run: docker pull saz0568/zelos-image:pytorch${{ env.VERSION }}
+    - name: Log in to zelos Harbor
+      run: echo "${{ secrets.HARBOR_PASSWORD }}" | docker login harbor.zelostech.com.cn:5443 --username=${{ secrets.HARBOR_USERNAME }} --password-stdin
+    - name: Tag Harbor images
+      run: docker tag saz0568/zelos-image:pytorch${{ env.VERSION }} harbor.zelostech.com.cn:5443/map/pytorch:${{ env.VERSION }}
+    - name: Push Harbor images
+      run: docker push harbor.zelostech.com.cn:5443/map/pytorch:${{ env.VERSION }}
