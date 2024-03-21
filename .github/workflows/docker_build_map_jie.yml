@@ -4,19 +4,21 @@ on:
   push:
     branches: [ "main" ]
     paths: [
-      "map/**",
-      ".github/workflows/docker_build_map.yml",
+      "map/jie/**",
+      ".github/workflows/docker_build_map_jie.yml",
     ]
   pull_request:
     branches: [ "main" ]
     types: [opened, synchronize, closed]
     paths: [
-      "map/**",
-      ".github/workflows/docker_build_map.yml",
+      "map/jie/**",
+      ".github/workflows/docker_build_map_jie.yml",
     ]
 
 env:
-  VERSION: 1.13.1-trt8.5-cudnn8.7-cu11.8
+  IMAGE_NAME: mm
+  VERSION: det2.26-det3d1.0.0rc6-cvfull1.6-cls0.25-torch2.0-cu118
+  DOCKERFILE: mm.Dockerfile
 
 jobs:
   build:
@@ -32,9 +34,9 @@ jobs:
     - name: Delete huge unnecessary tools folder
       run: rm -rf /opt/hostedtoolcache
     - name: Build Docker images
-      run: docker build -f map/yangsong.Dockerfile -t saz0568/zelos-image:pytorch${{ env.VERSION }} .
+      run: docker build -f map/jie/${{ env.DOCKERFILE }} -t saz0568/zelos-image:${{ env.IMAGE_NAME }}${{ env.VERSION }} .
     - name: Push Docker images
-      run: docker push saz0568/zelos-image:pytorch${{ env.VERSION }}
+      run: docker push saz0568/zelos-image:${{ env.IMAGE_NAME }}${{ env.VERSION }}
   publish:
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.merged == true }}
@@ -48,10 +50,10 @@ jobs:
     - name: Delete huge unnecessary tools folder
       run: rm -rf /opt/hostedtoolcache
     - name: Pull Docker image from DockerHub
-      run: docker pull saz0568/zelos-image:pytorch${{ env.VERSION }}
+      run: docker pull saz0568/zelos-image:${{ env.IMAGE_NAME }}${{ env.VERSION }}
     - name: Log in to zelos Harbor
       run: echo "${{ secrets.HARBOR_PASSWORD }}" | docker login harbor.zelostech.com.cn:5443 --username=${{ secrets.HARBOR_USERNAME }} --password-stdin
     - name: Tag Harbor images
-      run: docker tag saz0568/zelos-image:pytorch${{ env.VERSION }} harbor.zelostech.com.cn:5443/map/pytorch:${{ env.VERSION }}
+      run: docker tag saz0568/zelos-image:${{ env.IMAGE_NAME }}${{ env.VERSION }} harbor.zelostech.com.cn:5443/map/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
     - name: Push Harbor images
-      run: docker push harbor.zelostech.com.cn:5443/map/pytorch:${{ env.VERSION }}
+      run: docker push harbor.zelostech.com.cn:5443/map/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
