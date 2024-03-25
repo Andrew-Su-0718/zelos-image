@@ -25,6 +25,7 @@ RUN conda install pytorch==1.12.1 torchvision==0.13.1 cudatoolkit=11.3 -c pytorc
 RUN pip install -U openmim==0.3.9 && rm -rf /root/.cache/pip
 RUN mim install mmengine mmdet==3.1.0 mmdet3d==1.3.0 mmsegmentation==1.1.1 imagecorruptions==1.1.2 pytorch-quantization==2.1.3 psutil==5.9.5 && rm -rf /root/.cache/pip
 RUN pip install jupyter==1.0.0 && rm -rf /root/.cache/pip
+RUN pip install spconv-cu114==2.3.6 && rm -rf /root/.cache/pip
 SHELL ["/bin/bash", "-c"]
 
 RUN wget http://101.34.36.92/download/arena_bin.tar -O /tmp/arena_bin.tar && \
