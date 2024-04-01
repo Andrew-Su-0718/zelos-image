@@ -28,9 +28,9 @@ RUN pip install jupyter==1.0.0 && rm -rf /root/.cache/pip
 # RUN pip install spconv-cu114==2.3.6 && rm -rf /root/.cache/pip
 SHELL ["/bin/bash", "-c"]
 
-RUN wget http://101.34.36.92/download/arena_bin.tar -O /tmp/arena_bin.tar && \
-  tar -xvf /tmp/arena_bin.tar -C /usr/local/bin/ && \
-  rm /tmp/arena_bin.tar
+RUN wget http://101.34.36.92/download/arena_bin.tar.gz -O /tmp/arena_bin.tar.gz && \
+  tar -zxvf /tmp/arena_bin.tar.gz -C /usr/local/bin/ && \
+  rm /tmp/arena_bin.tar.gz
 # RUN /opt/conda/bin/conda env create -f /opt/mmdet3.1.0.yml
 
 ADD mmdet/image /
