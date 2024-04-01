@@ -15,6 +15,12 @@ FROM $BASE_IMG
 
 USER $SYS_USER
 
+# ADD rsync
+RUN export DEBIAN_FRONTEND=noninteractive \
+    && apt-get clean \
+    && apt-get update \
+    && apt-get install -y rsync \
+    && rm -rf /var/lib/apt/lists/*
 # ADD mmdet/mmdet3.1.0.yml /opt
 ADD pkgs /opt/conda/envs/mmdet3.1.0/lib/python3.8/site-packages
 ENV PATH /opt/conda/bin:$PATH
@@ -41,5 +47,5 @@ RUN echo 'Asia/Shanghai' > /etc/timezone
 USER $NB_USER
 ENV NB_PREFIX /
 
-ENTRYPOINT ["/startup.sh"]
+ENTRYPOINT ["/bin/bash", "-c", "rsync --daemon --no-detach && /startup.sh"]
 
