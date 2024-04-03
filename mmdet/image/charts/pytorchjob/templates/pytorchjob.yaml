@@ -63,7 +63,6 @@ spec:
           {{- range $key, $value := .Values.labels }}
             {{ $key }}: {{ $value | quote }}
           {{- end }}  
-            idecar.istio.io/inject: "false"
           annotations:
             {{- range $key, $value := .Values.annotations }}
               {{ $key }}: {{ $value | quote }}
@@ -356,7 +355,6 @@ spec:
           {{- range $key, $value := .Values.labels }}
             {{ $key }}: {{ $value | quote }}
           {{- end }}    
-            idecar.istio.io/inject: "false"
           annotations:
             {{- range $key, $value := .Values.annotations }}
               {{ $key }}: {{ $value | quote }}

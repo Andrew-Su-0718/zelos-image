@@ -3,8 +3,8 @@
 # Declare variables to be passed into your templates.
 
 useHostNetwork: false
-useHostPID: true
-useHostIPC: true
+useHostPID: false
+useHostIPC: false
 gpuCount: 0 # user define
 
 # rsync image
@@ -32,6 +32,8 @@ tensorboardResources: {}
 
 annotations: {}
 # annotations:
+
+labels: {"idecar.istio.io/inject": "false"}
 
 # enable RDMA support
 enableRDMA: false
