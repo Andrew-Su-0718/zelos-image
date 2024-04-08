@@ -52,6 +52,6 @@ jobs:
     - name: Log in to zelos Harbor
       run: echo "${{ secrets.HARBOR_PASSWORD }}" | docker login harbor.zelostech.com.cn:5443 --username=${{ secrets.HARBOR_USERNAME }} --password-stdin
     - name: Tag Harbor images
-      run: docker tag saz0568/zelos-image:nccl-tests_${{ env.VERSION }} harbor.zelostech.com.cn:5443/devops/anzhe/yolov7:nccl-tests_${{ env.VERSION }}
+      run: docker tag saz0568/zelos-image:nccl-tests_${{ env.VERSION }} harbor.zelostech.com.cn:5443/devops/anzhe/nccl-tests:${{ env.VERSION }}
     - name: Push Harbor images
-      run: docker push harbor.zelostech.com.cn:5443/devops/anzhe/yolov7:nccl-tests_${{ env.VERSION }}
+      run: docker push harbor.zelostech.com.cn:5443/devops/anzhe/nccl-tests:${{ env.VERSION }}
