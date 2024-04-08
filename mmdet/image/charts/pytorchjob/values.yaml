@@ -33,7 +33,8 @@ tensorboardResources: {}
 annotations: {}
 # annotations:
 
-labels: {"idecar.istio.io/inject": "false"}
+labels: 
+  sidecar.istio.io/inject: false
 
 # enable RDMA support
 enableRDMA: false
