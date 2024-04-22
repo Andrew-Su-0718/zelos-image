@@ -35,6 +35,72 @@ jobs:
       run: docker tag gcr.io/ml-pipeline/cache-server:2.0.5 saz0568/zelos-image:ml-pipeline_cache-server_2.0.5
     - name: Push Docker images
       run: docker push saz0568/zelos-image:ml-pipeline_cache-server_2.0.5
+    - name: Pull Docker images
+      run: docker pull gcr.io/ml-pipeline/metadata-envoy:2.0.5
+    - name: Tag Docker images
+      run: docker tag gcr.io/ml-pipeline/metadata-envoy:2.0.5 saz0568/zelos-image:ml-pipeline_metadata-envoy_2.0.5
+    - name: Push Docker images
+      run: docker push saz0568/zelos-image:ml-pipeline_metadata-envoy_2.0.5
+    - name: Pull Docker images
+      run: docker pull gcr.io/tfx-oss-public/ml_metadata_store_server:1.14.0
+    - name: Tag Docker images
+      run: docker tag gcr.io/tfx-oss-public/ml_metadata_store_server:1.14.0 saz0568/zelos-image:ml_metadata_store_server_1.14.0
+    - name: Push Docker images
+      run: docker push saz0568/zelos-image:ml_metadata_store_server_1.14.0
+    - name: Pull Docker images
+      run: docker pull gcr.io/ml-pipeline/metadata-writer:2.0.5
+    - name: Tag Docker images
+      run: docker tag gcr.io/ml-pipeline/metadata-writer:2.0.5 saz0568/zelos-image:ml-pipeline_metadata-writer_2.0.5
+    - name: Push Docker images
+      run: docker push saz0568/zelos-image:ml-pipeline_metadata-writer_2.0.5
+    - name: Pull Docker images
+      run: docker pull gcr.io/ml-pipeline/minio:RELEASE.2019-08-14T20-37-41Z-license-compliance
+    - name: Tag Docker images
+      run: docker tag gcr.io/ml-pipeline/minio:RELEASE.2019-08-14T20-37-41Z-license-compliance saz0568/zelos-image:ml-pipeline_minio_RELEASE.2019-08-14T20-37-41Z-license-compliance
+    - name: Push Docker images
+      run: docker push saz0568/zelos-image:ml-pipeline_minio_RELEASE.2019-08-14T20-37-41Z-license-compliance
+    - name: Pull Docker images
+      run: docker pull gcr.io/ml-pipeline/api-server:2.0.5
+    - name: Tag Docker images
+      run: docker tag gcr.io/ml-pipeline/api-server:2.0.5 saz0568/zelos-image:ml-pipeline_api-server_2.0.5
+    - name: Push Docker images
+      run: docker push saz0568/zelos-image:ml-pipeline_api-server_2.0.5
+    - name: Pull Docker images
+      run: docker pull gcr.io/ml-pipeline/persistenceagent:2.0.5
+    - name: Tag Docker images
+      run: docker tag gcr.io/ml-pipeline/persistenceagent:2.0.5 saz0568/zelos-image:ml-pipeline_persistenceagent_2.0.5
+    - name: Push Docker images
+      run: docker push saz0568/zelos-image:ml-pipeline_persistenceagent_2.0.5
+    - name: Pull Docker images
+      run: docker pull gcr.io/ml-pipeline/scheduledworkflow:2.0.5
+    - name: Tag Docker images
+      run: docker tag gcr.io/ml-pipeline/scheduledworkflow:2.0.5 saz0568/zelos-image:ml-pipeline_scheduledworkflow_2.0.5
+    - name: Push Docker images
+      run: docker push saz0568/zelos-image:ml-pipeline_scheduledworkflow_2.0.5
+    - name: Pull Docker images
+      run: docker pull gcr.io/ml-pipeline/frontend:2.0.5
+    - name: Tag Docker images
+      run: docker tag gcr.io/ml-pipeline/frontend:2.0.5 saz0568/zelos-image:ml-pipeline_frontend_2.0.5
+    - name: Push Docker images
+      run: docker push saz0568/zelos-image:ml-pipeline_frontend_2.0.5
+    - name: Pull Docker images
+      run: docker pull gcr.io/ml-pipeline/viewer-crd-controller:2.0.5
+    - name: Tag Docker images
+      run: docker tag gcr.io/ml-pipeline/viewer-crd-controller:2.0.5 saz0568/zelos-image:ml-pipeline_viewer-crd-controller_2.0.5
+    - name: Push Docker images
+      run: docker push saz0568/zelos-image:ml-pipeline_viewer-crd-controller_2.0.5
+    - name: Pull Docker images
+      run: docker pull gcr.io/ml-pipeline/visualization-server:2.0.5
+    - name: Tag Docker images
+      run: docker tag gcr.io/ml-pipeline/visualization-server:2.0.5 saz0568/zelos-image:ml-pipeline_visualization-server_2.0.5
+    - name: Push Docker images
+      run: docker push saz0568/zelos-image:ml-pipeline_visualization-server_2.0.5
+    - name: Pull Docker images
+      run: docker pull gcr.io/ml-pipeline/workflow-controller:v3.3.10-license-compliance
+    - name: Tag Docker images
+      run: docker tag gcr.io/ml-pipeline/workflow-controller:v3.3.10-license-compliance saz0568/zelos-image:ml-pipeline_workflow-controller_v3.3.10-license-compliance
+    - name: Push Docker images
+      run: docker push saz0568/zelos-image:ml-pipeline_workflow-controller_v3.3.10-license-compliance
   publish:
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.merged == true }}
@@ -52,6 +118,30 @@ jobs:
     - name: Log in to zelos Harbor
       run: echo "${{ secrets.HARBOR_PASSWORD }}" | docker login harbor.zelostech.com.cn:5443 --username=${{ secrets.HARBOR_USERNAME }} --password-stdin
     - name: Tag Harbor images
-      run: docker tag saz0568/zelos-image:ml-pipeline_cache-server_2.0.5 harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_cache-server_2.0.5
+      run: |
+        docker tag saz0568/zelos-image:ml-pipeline_cache-server_2.0.5 harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_cache-server_2.0.5 && \ 
+        docker tag saz0568/zelos-image:ml-pipeline_metadata-envoy_2.0.5 harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_metadata-envoy_2.0.5 && \ 
+        docker tag saz0568/zelos-image:ml_metadata_store_server_1.14.0 harbor.zelostech.com.cn:5443/devops/kubeflow:ml_metadata_store_server_1.14.0 && \ 
+        docker tag saz0568/zelos-image:ml-pipeline_metadata-writer_2.0.5 harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_metadata-writer_2.0.5 && \ 
+        docker tag saz0568/zelos-image:ml-pipeline_minio_RELEASE.2019-08-14T20-37-41Z-license-compliance harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_minio_RELEASE.2019-08-14T20-37-41Z-license-compliance && \ 
+        docker tag saz0568/zelos-image:ml-pipeline_api-server_2.0.5 harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_api-server_2.0.5 && \ 
+        docker tag saz0568/zelos-image:ml-pipeline_persistenceagent_2.0.5 harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_persistenceagent_2.0.5 && \ 
+        docker tag saz0568/zelos-image:ml-pipeline_scheduledworkflow_2.0.5 harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_scheduledworkflow_2.0.5 && \ 
+        docker tag saz0568/zelos-image:ml-pipeline_frontend_2.0.5 harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_frontend_2.0.5 && \ 
+        docker tag saz0568/zelos-image:ml-pipeline_viewer-crd-controller_2.0.5 harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_viewer-crd-controller_2.0.5 && \ 
+        docker tag saz0568/zelos-image:ml-pipeline_visualization-server_2.0.5 harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_visualization-server_2.0.5 && \ 
+        docker tag saz0568/zelos-image:ml-pipeline_workflow-controller_v3.3.10-license-compliance harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_workflow-controller_v3.3.10-license-compliance
     - name: Push Harbor images
-      run: docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_cache-server_2.0.5
+      run: |
+        docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_cache-server_2.0.5 && 
+        docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_metadata-envoy_2.0.5 && 
+        docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml_metadata_store_server_1.14.0 && 
+        docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_metadata-writer_2.0.5 && 
+        docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_minio_RELEASE.2019-08-14T20-37-41Z-license-compliance && 
+        docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_api-server_2.0.5 && 
+        docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_persistenceagent_2.0.5 && 
+        docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_scheduledworkflow_2.0.5 && 
+        docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_frontend_2.0.5 && 
+        docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_viewer-crd-controller_2.0.5 && 
+        docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_visualization-server_2.0.5 && 
+        docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_workflow-controller_v3.3.10-license-compliance
