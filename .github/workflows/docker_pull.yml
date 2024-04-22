@@ -1,0 +1,57 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+    paths: [
+      ".github/workflows/docker_pull.yml",
+    ]
+  pull_request:
+    branches: [ "main" ]
+    types: [opened, synchronize, closed]
+    paths: [
+      ".github/workflows/docker_pull.yml",
+    ]
+
+env:
+  VERSION: 3.1.0
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2.1.0
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    - name: Delete huge unnecessary tools folder
+      run: rm -rf /opt/hostedtoolcache
+    - name: Pull Docker images
+      run: docker pull gcr.io/ml-pipeline/cache-server:2.0.5
+    - name: Tag Docker images
+      run: docker tag gcr.io/ml-pipeline/cache-server:2.0.5 saz0568/zelos-image/ml-pipeline/cache-server:2.0.5
+    - name: Push Docker images
+      run: docker push saz0568/zelos-image/ml-pipeline/cache-server:2.0.5
+  publish:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.merged == true }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2.1.0
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    - name: Delete huge unnecessary tools folder
+      run: rm -rf /opt/hostedtoolcache
+    - name: Pull Docker image from DockerHub
+      run: docker pull saz0568/zelos-image:mmdet_${{ env.VERSION }}
+    - name: Log in to zelos Harbor
+      run: echo "${{ secrets.HARBOR_PASSWORD }}" | docker login harbor.zelostech.com.cn:5443 --username=${{ secrets.HARBOR_USERNAME }} --password-stdin
+    - name: Tag Harbor images
+      run: docker tag saz0568/zelos-image:mmdet_${{ env.VERSION }} harbor.zelostech.com.cn:5443/perception/pantheon:mmdet_${{ env.VERSION }}
+    - name: Push Harbor images
+      run: docker push harbor.zelostech.com.cn:5443/perception/pantheon:mmdet_${{ env.VERSION }}
