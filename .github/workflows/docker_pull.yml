@@ -96,6 +96,12 @@ jobs:
     - name: Push Docker images
       run: docker push saz0568/zelos-image:ml-pipeline_visualization-server_2.0.5
     - name: Pull Docker images
+      run: docker pull gcr.io/ml-pipeline/mysql:8.0.26
+    - name: Tag Docker images
+      run: docker tag gcr.io/ml-pipeline/mysql:8.0.26 saz0568/zelos-image:ml-pipeline_mysql_8.0.26
+    - name: Push Docker images
+      run: docker push saz0568/zelos-image:ml-pipeline_mysql_8.0.26
+    - name: Pull Docker images
       run: docker pull gcr.io/ml-pipeline/workflow-controller:v3.3.10-license-compliance
     - name: Tag Docker images
       run: docker tag gcr.io/ml-pipeline/workflow-controller:v3.3.10-license-compliance saz0568/zelos-image:ml-pipeline_workflow-controller_v3.3.10-license-compliance
@@ -114,7 +120,20 @@ jobs:
     - name: Delete huge unnecessary tools folder
       run: rm -rf /opt/hostedtoolcache
     - name: Pull Docker image from DockerHub
-      run: docker pull saz0568/zelos-image:ml-pipeline_cache-server_2.0.5
+      run: |
+        docker pull saz0568/zelos-image:ml-pipeline_cache-server_2.0.5 && \ 
+        docker pull saz0568/zelos-image:ml-pipeline_metadata-envoy_2.0.5 && \ 
+        docker pull saz0568/zelos-image:ml_metadata_store_server_1.14.0 && \ 
+        docker pull saz0568/zelos-image:ml-pipeline_metadata-writer_2.0.5 && \ 
+        docker pull saz0568/zelos-image:ml-pipeline_minio_RELEASE.2019-08-14T20-37-41Z-license-compliance && \ 
+        docker pull saz0568/zelos-image:ml-pipeline_api-server_2.0.5 && \ 
+        docker pull saz0568/zelos-image:ml-pipeline_persistenceagent_2.0.5 && \ 
+        docker pull saz0568/zelos-image:ml-pipeline_scheduledworkflow_2.0.5 && \ 
+        docker pull saz0568/zelos-image:ml-pipeline_frontend_2.0.5 && \ 
+        docker pull saz0568/zelos-image:ml-pipeline_viewer-crd-controller_2.0.5 && \ 
+        docker pull saz0568/zelos-image:ml-pipeline_visualization-server_2.0.5 && \ 
+        docker pull saz0568/zelos-image:ml-pipeline_mysql_8.0.26 && \ 
+        docker pull saz0568/zelos-image:ml-pipeline_workflow-controller_v3.3.10-license-compliance
     - name: Log in to zelos Harbor
       run: echo "${{ secrets.HARBOR_PASSWORD }}" | docker login harbor.zelostech.com.cn:5443 --username=${{ secrets.HARBOR_USERNAME }} --password-stdin
     - name: Tag Harbor images
@@ -130,6 +149,7 @@ jobs:
         docker tag saz0568/zelos-image:ml-pipeline_frontend_2.0.5 harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_frontend_2.0.5 && \ 
         docker tag saz0568/zelos-image:ml-pipeline_viewer-crd-controller_2.0.5 harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_viewer-crd-controller_2.0.5 && \ 
         docker tag saz0568/zelos-image:ml-pipeline_visualization-server_2.0.5 harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_visualization-server_2.0.5 && \ 
+        docker tag saz0568/zelos-image:ml-pipeline_mysql_8.0.26 harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_mysql_8.0.26 && \
         docker tag saz0568/zelos-image:ml-pipeline_workflow-controller_v3.3.10-license-compliance harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_workflow-controller_v3.3.10-license-compliance
     - name: Push Harbor images
       run: |
@@ -144,4 +164,5 @@ jobs:
         docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_frontend_2.0.5 && 
         docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_viewer-crd-controller_2.0.5 && 
         docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_visualization-server_2.0.5 && 
+        docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_mysql_8.0.26 && 
         docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_workflow-controller_v3.3.10-license-compliance
