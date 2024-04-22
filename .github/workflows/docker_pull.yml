@@ -32,9 +32,9 @@ jobs:
     - name: Pull Docker images
       run: docker pull gcr.io/ml-pipeline/cache-server:2.0.5
     - name: Tag Docker images
-      run: docker tag gcr.io/ml-pipeline/cache-server:2.0.5 saz0568/zelos-image/ml-pipeline/cache-server:2.0.5
+      run: docker tag gcr.io/ml-pipeline/cache-server:2.0.5 saz0568/zelos-image:ml-pipeline_cache-server_2.0.5
     - name: Push Docker images
-      run: docker push saz0568/zelos-image/ml-pipeline/cache-server:2.0.5
+      run: docker push saz0568/zelos-image:ml-pipeline_cache-server_2.0.5
   publish:
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.merged == true }}
