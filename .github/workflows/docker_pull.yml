@@ -126,7 +126,7 @@ jobs:
     - name: Delete huge unnecessary tools folder
       run: rm -rf /opt/hostedtoolcache
     - name: Pull Docker image from DockerHub
-      run: |
+      run: docker pull saz0568/zelos-image:ml-pipeline_argoexec_v3.3.10-license-compliance
 #        docker pull saz0568/zelos-image:ml-pipeline_cache-server_2.0.5 && 
 #        docker pull saz0568/zelos-image:ml-pipeline_metadata-envoy_2.0.5 && 
 #        docker pull saz0568/zelos-image:ml_metadata_store_server_1.14.0 && 
@@ -140,11 +140,10 @@ jobs:
 #        docker pull saz0568/zelos-image:ml-pipeline_visualization-server_2.0.5 && 
 #        docker pull saz0568/zelos-image:ml-pipeline_mysql_8.0.26 && 
 #        docker pull saz0568/zelos-image:ml-pipeline_workflow-controller_v3.3.10-license-compliance
-        docker pull saz0568/zelos-image:ml-pipeline_argoexec_v3.3.10-license-compliance
     - name: Log in to zelos Harbor
       run: echo "${{ secrets.HARBOR_PASSWORD }}" | docker login harbor.zelostech.com.cn:5443 --username=${{ secrets.HARBOR_USERNAME }} --password-stdin
     - name: Tag Harbor images
-      run: |
+      run: docker tag saz0568/zelos-image:ml-pipeline_argoexec_v3.3.10-license-compliance harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_argoexec_v3.3.10-license-compliance
 #        docker tag saz0568/zelos-image:ml-pipeline_cache-server_2.0.5 harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_cache-server_2.0.5 && 
 #        docker tag saz0568/zelos-image:ml-pipeline_metadata-envoy_2.0.5 harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_metadata-envoy_2.0.5 && 
 #        docker tag saz0568/zelos-image:ml_metadata_store_server_1.14.0 harbor.zelostech.com.cn:5443/devops/kubeflow:ml_metadata_store_server_1.14.0 && 
@@ -158,9 +157,8 @@ jobs:
 #        docker tag saz0568/zelos-image:ml-pipeline_visualization-server_2.0.5 harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_visualization-server_2.0.5 && 
 #        docker tag saz0568/zelos-image:ml-pipeline_mysql_8.0.26 harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_mysql_8.0.26 && 
 #        docker tag saz0568/zelos-image:ml-pipeline_workflow-controller_v3.3.10-license-compliance harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_workflow-controller_v3.3.10-license-compliance
-        docker tag saz0568/zelos-image:ml-pipeline_argoexec_v3.3.10-license-compliance harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_argoexec_v3.3.10-license-compliance
     - name: Push Harbor images
-      run: |
+      run: docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_argoexec_v3.3.10-license-compliance
 #        docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_cache-server_2.0.5 && 
 #        docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_metadata-envoy_2.0.5 && 
 #        docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml_metadata_store_server_1.14.0 && 
@@ -174,4 +172,3 @@ jobs:
 #        docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_visualization-server_2.0.5 && 
 #        docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_mysql_8.0.26 && 
 #        docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_workflow-controller_v3.3.10-license-compliance
-        docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_argoexec_v3.3.10-license-compliance
