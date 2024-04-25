@@ -113,6 +113,12 @@ jobs:
       run: docker tag gcr.io/ml-pipeline/argoexec:v3.3.10-license-compliance saz0568/zelos-image:ml-pipeline_argoexec_v3.3.10-license-compliance
     - name: Push Docker images
       run: docker push saz0568/zelos-image:ml-pipeline_argoexec_v3.3.10-license-compliance
+    - name: Pull Docker images
+      run: docker pull gcr.io/ml-pipeline/kfp-driver@sha256:8e60086b04d92b657898a310ca9757631d58547e76bbbb8bfc376d654bef1707
+    - name: Tag Docker images
+      run: docker tag gcr.io/ml-pipeline/kfp-driver@sha256:8e60086b04d92b657898a310ca9757631d58547e76bbbb8bfc376d654bef1707 saz0568/zelos-image:ml-pipeline_kfp-driver_sha256-8e60086b04d92b657898a310ca9757631d58547e76bbbb8bfc376d654bef1707
+    - name: Push Docker images
+      run: docker push saz0568/zelos-image:ml-pipeline_kfp-driver_sha256-8e60086b04d92b657898a310ca9757631d58547e76bbbb8bfc376d654bef1707
   publish:
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.merged == true }}
