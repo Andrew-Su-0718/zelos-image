@@ -24,27 +24,52 @@ SHELL ["/bin/bash", "-c"]
 # install - usefull linux packages
 RUN export DEBIAN_FRONTEND=noninteractive \
  && apt-get -yq update \
+ && apt-get install -y tzdata \
+ && ln -fs /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+ && dpkg-reconfigure --frontend noninteractive tzdata \
  && apt-get -yq install --no-install-recommends \
     apt-transport-https \
     bash \
+    build-essential \
     bzip2 \
     ca-certificates \
     curl \
     git \
     gnupg \
     gnupg2 \
+    htop \
+    libgl1 \
+    libglib2.0-0 \
+    libboost-filesystem-dev \
+    libboost-dev \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
     locales \
     lsb-release \
     nano \
+    nethogs \
+    net-tools \
+    openssh-server \
     software-properties-common \
-    tzdata \
+    sudo \
     unzip \
     vim \
     wget \
     xz-utils \
     zip \
+    zsh \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
+
+RUN echo 'root:ShARC' | chpasswd && \
+ echo "jovyan ALL=NOPASSWD: /usr/sbin/service ssh start" >> /etc/sudoers && \
+ echo "jovyan ALL=NOPASSWD: /usr/sbin/service ssh restart" >> /etc/sudoers && \
+ echo "jovyan ALL=NOPASSWD: /usr/sbin/service ssh stop" >> /etc/sudoers && \
+ echo "jovyan ALL=NOPASSWD: /usr/sbin/service ssh status" >> /etc/sudoers && \
+ echo "jovyan:x:1337:" >> /etc/group && \
+ sed -i "s/#PermitRootLogin prohibit-password/PermitRootLogin yes/" /etc/ssh/sshd_config && \
+ sed -i "s/#PasswordAuthentication yes/PasswordAuthentication no/" /etc/ssh/sshd_config
 
 # install - s6 overlay
 RUN case "${TARGETARCH}" in \
