@@ -30,6 +30,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
  && apt-get -yq install --no-install-recommends \
     apt-transport-https \
     bash \
+    bind9-dnsutils \
     build-essential \
     bzip2 \
     ca-certificates \
@@ -38,6 +39,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     gnupg \
     gnupg2 \
     htop \
+    iftop \
+    iperf3 \
     libgl1 \
     libglib2.0-0 \
     libboost-filesystem-dev \
@@ -51,6 +54,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     nethogs \
     net-tools \
     openssh-server \
+    rsync \
     software-properties-common \
     sudo \
     unzip \
