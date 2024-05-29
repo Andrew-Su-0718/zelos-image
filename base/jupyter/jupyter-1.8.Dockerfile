@@ -2,7 +2,7 @@
 # NOTE: Use the Makefiles to build this image correctly.
 #
 
-ARG BASE_IMG=harbor.zelostech.com.cn:5443/devops/jupyter/jupyter:base
+ARG BASE_IMG=saz0568/zelos-image:jupyter-base
 FROM $BASE_IMG
 
 ARG TARGETARCH=amd64

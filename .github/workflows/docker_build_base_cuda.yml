@@ -1,17 +1,17 @@
-name: Docker Image CI
+name: CI(base-cuda)
 
 on:
   push:
     branches: [ "main" ]
     paths: [
-      "base/base/**",
+      "base/cuda/**",
       ".github/workflows/docker_build_base_base.yml",
     ]
   pull_request:
     branches: [ "main" ]
     types: [opened, synchronize, closed]
     paths: [
-      "base/base/**",
+      "base/cuda/**",
       ".github/workflows/docker_build_base_base.yml",
     ]
 
