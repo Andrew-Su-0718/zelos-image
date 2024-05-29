@@ -5,14 +5,14 @@ on:
     branches: [ "main" ]
     paths: [
       "base/cuda/**",
-      ".github/workflows/docker_build_base_base.yml",
+      ".github/workflows/docker_build_base_cuda.yml",
     ]
   pull_request:
     branches: [ "main" ]
     types: [opened, synchronize, closed]
     paths: [
       "base/cuda/**",
-      ".github/workflows/docker_build_base_base.yml",
+      ".github/workflows/docker_build_base_cuda.yml",
     ]
 
 env:
@@ -34,7 +34,7 @@ jobs:
     - name: Delete huge unnecessary tools folder
       run: rm -rf /opt/hostedtoolcache
     - name: Build Docker images
-      run: docker build -f base/base/${{ env.DOCKERFILE }} -t saz0568/zelos-image:${{ env.IMAGE_NAME }}-${{ env.VERSION }} .
+      run: docker build -f base/cuda/${{ env.DOCKERFILE }} -t saz0568/zelos-image:${{ env.IMAGE_NAME }}-${{ env.VERSION }} .
     - name: Push Docker images
       run: docker push saz0568/zelos-image:${{ env.IMAGE_NAME }}-${{ env.VERSION }}
   publish:
