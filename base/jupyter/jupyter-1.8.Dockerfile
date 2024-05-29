@@ -2,10 +2,10 @@
 # NOTE: Use the Makefiles to build this image correctly.
 #
 
-ARG BASE_IMG=<base>
+ARG BASE_IMG=harbor.zelostech.com.cn:5443/devops/jupyter/jupyter:base
 FROM $BASE_IMG
 
-ARG TARGETARCH
+ARG TARGETARCH=amd64
 
 USER root
 
@@ -15,7 +15,8 @@ ARG JUPYTER_VERSION=6.5.6
 ARG MINIFORGE_VERSION=23.3.1-1
 ARG NODE_MAJOR_VERSION=18
 ARG PIP_VERSION=23.2.1
-ARG PYTHON_VERSION=3.11.6
+# ARG PYTHON_VERSION=3.11.6
+ARG PYTHON_VERSION=3.8.19
 
 # install -- node.js
 RUN export DEBIAN_FRONTEND=noninteractive \
