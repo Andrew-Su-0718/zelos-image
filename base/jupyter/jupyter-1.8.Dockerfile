@@ -10,9 +10,12 @@ ARG TARGETARCH=amd64
 USER root
 
 # args - software versions
-ARG JUPYTERLAB_VERSION=3.6.6
-ARG JUPYTER_VERSION=6.5.6
-ARG MINIFORGE_VERSION=23.3.1-1
+# ARG JUPYTERLAB_VERSION=3.6.6
+ARG JUPYTERLAB_VERSION=4.2.1
+# ARG JUPYTER_VERSION=6.5.6
+ARG JUPYTER_VERSION=7.2.0
+# ARG MINIFORGE_VERSION=23.3.1-1
+ARG MINIFORGE_VERSION=24.3.0-0
 ARG NODE_MAJOR_VERSION=18
 ARG PIP_VERSION=23.2.1
 # ARG PYTHON_VERSION=3.11.6
@@ -40,7 +43,7 @@ RUN mkdir -p ${CONDA_DIR} \
  && chown -R ${NB_USER}:users ${HOME}
 
 # switch to NB_UID for installs
-USER $NB_UID
+# USER $NB_UID
 
 # install - conda, pip, python, jupyter
 RUN case "${TARGETARCH}" in \
@@ -85,11 +88,11 @@ USER root
 RUN mkdir -p /tmp_home \
  && cp -r ${HOME} /tmp_home \
  && chown -R ${NB_USER}:users /tmp_home
-USER $NB_UID
 
 # generate jupyter config
 RUN jupyter notebook --generate-config \
  && jupyter lab --generate-config \
  && jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
+USER $NB_UID
 
 EXPOSE 8888
