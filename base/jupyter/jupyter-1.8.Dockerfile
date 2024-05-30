@@ -88,11 +88,11 @@ USER root
 RUN mkdir -p /tmp_home \
  && cp -r ${HOME} /tmp_home \
  && chown -R ${NB_USER}:users /tmp_home
-USER $NB_UID
 
 # generate jupyter config
 RUN jupyter notebook --generate-config \
  && jupyter lab --generate-config \
  && jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
+USER $NB_UID
 
 EXPOSE 8888
