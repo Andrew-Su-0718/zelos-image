@@ -71,6 +71,7 @@ RUN echo 'root:ShARC' | chpasswd && \
  echo "jovyan ALL=NOPASSWD: /usr/sbin/service ssh restart" >> /etc/sudoers && \
  echo "jovyan ALL=NOPASSWD: /usr/sbin/service ssh stop" >> /etc/sudoers && \
  echo "jovyan ALL=NOPASSWD: /usr/sbin/service ssh status" >> /etc/sudoers && \
+ echo "jovyan ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
  echo "jovyan:x:1337:" >> /etc/group && \
  sed -i "s/#PermitRootLogin prohibit-password/PermitRootLogin yes/" /etc/ssh/sshd_config && \
  sed -i "s/#PasswordAuthentication yes/PasswordAuthentication no/" /etc/ssh/sshd_config
