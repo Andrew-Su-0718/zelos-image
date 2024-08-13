@@ -128,7 +128,7 @@ jobs:
     - name: Pull Docker images
       run: docker pull redis/redis-stack:7.4.0-v0
     - name: Tag Docker images
-      run: docker tag redis/redis-stack:latest saz0568/zelos-image:redis-stack-7.4.0-v0
+      run: docker tag redis/redis-stack:7.4.0-v0 saz0568/zelos-image:redis-stack-7.4.0-v0
     - name: Push Docker images
       run: docker push saz0568/zelos-image:redis-stack-7.4.0-v0
   publish:
