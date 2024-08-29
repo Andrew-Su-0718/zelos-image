@@ -2,7 +2,8 @@
 # NOTE: Use the Makefiles to build this image correctly.
 #
 
-ARG BASE_IMG=nvcr.io/nvidia/cuda:11.4.3-cudnn8-devel-ubuntu20.04
+# ARG BASE_IMG=nvcr.io/nvidia/cuda:11.4.3-cudnn8-devel-ubuntu20.04
+ARG BASE_IMG=nvcr.io/nvidia/cuda:11.8.0-cudnn8-devel-ubuntu20.04
 FROM $BASE_IMG
 
 ARG TARGETARCH=amd64
