@@ -17,7 +17,7 @@ on:
 
 env:
   IMAGE_NAME: jupyter
-  VERSION: 1.8.0
+  VERSION: 1.8.0-cu11.8
   DOCKERFILE: jupyter-1.8.Dockerfile
 
 jobs:
