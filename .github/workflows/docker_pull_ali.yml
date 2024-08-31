@@ -34,7 +34,7 @@ jobs:
     - name: Log in to Ali mirror
       run: echo "${{ secrets.ALIMIRROR_PASSWORD }}" | docker login registry.cn-hangzhou.aliyuncs.com --username=${{ secrets.ALIMIRROR_USERNAME }} --password-stdin
     - name: Tag Docker images xiaoyaliu/alist:latest for 20240820
-      run: docker tag xiaoyaliu/alist:lastet registry.cn-hangzhou.aliyuncs.com/saz0568/alist:latest
+      run: docker tag xiaoyaliu/alist:latest registry.cn-hangzhou.aliyuncs.com/saz0568/alist:latest
     - name: Push Docker images xiaoyaliu/alist:latest for 20240820
       run: docker push registry.cn-hangzhou.aliyuncs.com/saz0568/alist:latest
   publish:
