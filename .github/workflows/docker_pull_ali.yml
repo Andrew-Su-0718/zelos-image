@@ -30,13 +30,19 @@ jobs:
     - name: Delete huge unnecessary tools folder
       run: rm -rf /opt/hostedtoolcache
     - name: Pull Docker images xiaoyaliu/alist:latest for 20240820
-      run: docker pull xiaoyaliu/alist:latest
+      run: docker pull xiaoyaliu/alist:latest --platform linux/amd64
+    - name: Tag Docker images xiaoyaliu/alist:latest for 20240820
+      run: docker tag xiaoyaliu/alist:latest registry.cn-hangzhou.aliyuncs.com/saz0568/alist:latest-amd64
+    - name: Pull Docker images xiaoyaliu/alist:latest for 20240820
+      run: docker pull xiaoyaliu/alist:latest --platform linux/arm/v7
+    - name: Tag Docker images xiaoyaliu/alist:latest for 20240820
+      run: docker tag xiaoyaliu/alist:latest registry.cn-hangzhou.aliyuncs.com/saz0568/alist:latest-armv7
     - name: Log in to Ali mirror
       run: echo "${{ secrets.ALIMIRROR_PASSWORD }}" | docker login registry.cn-hangzhou.aliyuncs.com --username=${{ secrets.ALIMIRROR_USERNAME }} --password-stdin
-    - name: Tag Docker images xiaoyaliu/alist:latest for 20240820
-      run: docker tag xiaoyaliu/alist:latest registry.cn-hangzhou.aliyuncs.com/saz0568/alist:latest
     - name: Push Docker images xiaoyaliu/alist:latest for 20240820
-      run: docker push registry.cn-hangzhou.aliyuncs.com/saz0568/alist:latest
+      run: docker push registry.cn-hangzhou.aliyuncs.com/saz0568/alist:latest-amd64
+    - name: Push Docker images xiaoyaliu/alist:latest for 20240820
+      run: docker push registry.cn-hangzhou.aliyuncs.com/saz0568/alist:latest-armv7
   publish:
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.merged == true }}
