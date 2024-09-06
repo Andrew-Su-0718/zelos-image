@@ -1,0 +1,65 @@
+name: Docker Image Pull
+
+on:
+  push:
+    branches: [ "main" ]
+    paths: [
+      ".github/workflows/docker_pull_ali.yml",
+    ]
+  pull_request:
+    branches: [ "main" ]
+    types: [opened, synchronize, closed]
+    paths: [
+      ".github/workflows/docker_pull_ali.yml",
+    ]
+
+env:
+  VERSION: 3.1.0
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2.1.0
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    - name: Delete huge unnecessary tools folder
+      run: rm -rf /opt/hostedtoolcache
+    - name: Pull Docker images xiaoyaliu/alist:latest for 20240820
+      run: docker pull xiaoyaliu/alist:latest --platform linux/amd64
+    - name: Tag Docker images xiaoyaliu/alist:latest for 20240820
+      run: docker tag xiaoyaliu/alist:latest registry.cn-hangzhou.aliyuncs.com/saz0568/alist:latest-amd64
+    - name: Pull Docker images xiaoyaliu/alist:latest for 20240820
+      run: docker pull xiaoyaliu/alist:latest --platform linux/arm/v7
+    - name: Tag Docker images xiaoyaliu/alist:latest for 20240820
+      run: docker tag xiaoyaliu/alist:latest registry.cn-hangzhou.aliyuncs.com/saz0568/alist:latest-armv7
+    - name: Log in to Ali mirror
+      run: echo "${{ secrets.ALIMIRROR_PASSWORD }}" | docker login registry.cn-hangzhou.aliyuncs.com --username=${{ secrets.ALIMIRROR_USERNAME }} --password-stdin
+    - name: Push Docker images xiaoyaliu/alist:latest for 20240820
+      run: docker push registry.cn-hangzhou.aliyuncs.com/saz0568/alist:latest-amd64
+    - name: Push Docker images xiaoyaliu/alist:latest for 20240820
+      run: docker push registry.cn-hangzhou.aliyuncs.com/saz0568/alist:latest-armv7
+  publish:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.merged == true }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2.1.0
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    - name: Delete huge unnecessary tools folder
+      run: rm -rf /opt/hostedtoolcache
+#    - name: Pull Docker image from DockerHub
+#      run: docker pull saz0568/zelos-image:redis-stack-7.4.0-v0
+#    - name: Log in to zelos Harbor
+#      run: echo "${{ secrets.HARBOR_PASSWORD }}" | docker login harbor.zelostech.com.cn:5443 --username=${{ secrets.HARBOR_USERNAME }} --password-stdin
+#    - name: Tag Harbor images
+#      run: docker tag saz0568/zelos-image:redis-stack-7.4.0-v0 harbor.zelostech.com.cn:5443/devops/redis/redis-stack:7.4.0-v0
+#    - name: Push Harbor images
+#      run: docker push harbor.zelostech.com.cn:5443/devops/redis/redis-stack:7.4.0-v0
