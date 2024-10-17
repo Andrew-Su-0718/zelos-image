@@ -3,6 +3,10 @@ FROM saz0568/zelos-image:jupyter-1.8.0-cu11.8-ubuntu22.04
 # 维护者
 MAINTAINER anzhe.su anzhe.su@zelostech.com
 
+ARG NB_USER=jovyan
+ARG SYS_USER=root
+USER $SYS_USER
+
 RUN conda create -y --name yolo_world python=3.8 \
  && conda clean -ya
 ENV CONDA_DEFAULT_ENV=yolo_world
@@ -28,3 +32,5 @@ RUN apt-get -yq update \
  && git lfs install \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
+
+USER $NB_USER
