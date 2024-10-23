@@ -15,6 +15,9 @@ on:
 
 env:
   VERSION: 3.1.0
+  IMAGE_SRC: haproxytech/haproxy-alpine:3.0
+  IMAGE_INTERMEDIUM: saz0568/zelos-image:haproxytech-haproxy-alpine-3.0
+  IMAGE_DEST: harbor.zelostech.com.cn:5443/devops/haproxytech/haproxy-alpine:3.0
 
 jobs:
   build:
@@ -132,11 +135,11 @@ jobs:
 #    - name: Push Docker images
 #      run: docker push saz0568/zelos-image:redis-stack-7.4.0-v0
     - name: Pull Docker images
-      run: docker pull eipwork/etcd-host:3.4.16-2
+      run: docker pull ${{ env.IMAGE_SRC }}
     - name: Tag Docker images
-      run: docker tag eipwork/etcd-host:3.4.16-2 saz0568/zelos-image:eipwork-etcd-host-3.4.16-2
+      run: docker tag ${{ env.IMAGE_SRC }} ${{ env.IMAGE_INTERMEDIUM }}
     - name: Push Docker images
-      run: docker push saz0568/zelos-image:eipwork-etcd-host-3.4.16-2
+      run: docker push ${{ env.IMAGE_INTERMEDIUM }}
   publish:
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.merged == true }}
@@ -152,7 +155,7 @@ jobs:
 #     - name: Pull Docker image from DockerHub
 #       run: docker pull saz0568/zelos-image:redis-stack-7.4.0-v0
     - name: Pull Docker image from DockerHub
-      run: docker pull saz0568/zelos-image:eipwork-etcd-host-3.4.16-2
+      run: docker pull ${{ env.IMAGE_INTERMEDIUM }}
       #    - name: Pull Docker image from DockerHub
       #      run: docker pull saz0568/zelos-image:python-3.8.19
 #        docker pull saz0568/zelos-image:ml-pipeline_argoexec_v3.3.10-license-compliance
@@ -174,7 +177,7 @@ jobs:
 #     - name: Tag Harbor images
 #       run: docker tag saz0568/zelos-image:redis-stack-7.4.0-v0 harbor.zelostech.com.cn:5443/devops/redis/redis-stack:7.4.0-v0
     - name: Tag Harbor images
-      run: docker tag saz0568/zelos-image:eipwork-etcd-host-3.4.16-2 harbor.zelostech.com.cn:5443/devops/etcd/etcd-host:3.4.16-2
+      run: docker tag ${{ env.IMAGE_INTERMEDIUM }} ${{ IMAGE_DEST }}
 #        docker tag saz0568/zelos-image:ml-.3.10-license-compliance harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_argoexec_v3.3.10-license-compliance
 #        docker tag saz0568/zelos-image:ml-pipeline_cache-server_2.0.5 harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_cache-server_2.0.5 && 
 #        docker tag saz0568/zelos-image:ml-pipeline_metadata-envoy_2.0.5 harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_metadata-envoy_2.0.5 && 
@@ -192,7 +195,7 @@ jobs:
 #     - name: Push Harbor images
 #       run: docker push harbor.zelostech.com.cn:5443/devops/redis/redis-stack:7.4.0-v0
     - name: Push Harbor images
-      run: docker push harbor.zelostech.com.cn:5443/devops/etcd/etcd-host:3.4.16-2
+      run: docker push ${{ IMAGE_DEST }}
       #    - name: Push Harbor images
       #      run: docker push harbor.zelostech.com.cn:5443/devops/python:3.8.19
 #        docker push harbor.zelostech.com.cn:5443/devops/kubeflow:ml-pipeline_argoexec_v3.3.10-license-compliance
