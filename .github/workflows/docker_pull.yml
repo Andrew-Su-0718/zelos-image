@@ -15,9 +15,9 @@ on:
 
 env:
   VERSION: 3.1.0
-  IMAGE_SRC: haproxytech/haproxy-alpine:3.0
-  IMAGE_INTERMEDIUM: saz0568/zelos-image:haproxytech-haproxy-alpine-3.0
-  IMAGE_DEST: harbor.zelostech.com.cn:5443/devops/haproxytech/haproxy-alpine:3.0
+  IMAGE_SRC: questdb/questdb:6.0.4
+  IMAGE_INTERMEDIUM: saz0568/zelos-image:questdb-questdb-6.0.4
+  IMAGE_DEST: harbor.zelostech.com.cn:5443/devops/questdb/questdb:6.0.4
 
 jobs:
   build:
