@@ -13,11 +13,16 @@ on:
       ".github/workflows/docker_pull.yml",
     ]
 
+# env:
+#   VERSION: 3.1.0
+#   IMAGE_SRC: questdb/questdb:6.0.4
+#   IMAGE_INTERMEDIUM: saz0568/zelos-image:questdb-questdb-6.0.4
+#   IMAGE_DEST: harbor.zelostech.com.cn:5443/devops/questdb/questdb:6.0.4
 env:
-  VERSION: 3.1.0
-  IMAGE_SRC: questdb/questdb:6.0.4
-  IMAGE_INTERMEDIUM: saz0568/zelos-image:questdb-questdb-6.0.4
-  IMAGE_DEST: harbor.zelostech.com.cn:5443/devops/questdb/questdb:6.0.4
+  VERSION: 1.0.0
+  IMAGE_SRC: juicedata/mount:ce-v1.2.3
+  IMAGE_INTERMEDIUM: saz0568/zelos-image:juicedata-mount-ce-v1.2.3
+  IMAGE_DEST: harbor.zelostech.com.cn:5443/component/juicedata/mount:ce-v1.2.3
 
 jobs:
   build:
