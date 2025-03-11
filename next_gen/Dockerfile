@@ -27,7 +27,7 @@ ARG PYTORCH="2.5.1"
 ARG CUDA="12.2"
 ARG MMCV="2.0.1"
 RUN ["/bin/bash", "-c", "pip install openmim"]
-RUN ["/bin/bash", "-c", "mim install mmengine"]
+# RUN ["/bin/bash", "-c", "mim install mmengine"]
 
 # Install mmcv
 RUN pip install opencv-python-headless
