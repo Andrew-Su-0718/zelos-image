@@ -31,7 +31,7 @@ RUN ["/bin/bash", "-c", "pip install openmim"]
 
 # Install mmcv
 RUN pip install opencv-python-headless
-RUN git clone --depth 1 --branch v2.0.1 https://github.com/open-mmlab/mmcv.git /mmcv \
+RUN git clone --depth 1 --branch v2.2.0 https://github.com/open-mmlab/mmcv.git /mmcv \
     && cd /mmcv \
     && pip install -r requirements/optional.txt \
     && pip install -e . -v
