@@ -1,0 +1,60 @@
+name: CI(largemodel-yolo_world)
+
+on:
+  push:
+    branches: [ "main" ]
+    paths: [
+      "next_gen/**",
+      ".github/workflows/docker_build_next_gen.yml",
+    ]
+  pull_request:
+    branches: [ "main" ]
+    types: [opened, synchronize, closed]
+    paths: [
+      "next_gen/**",
+      ".github/workflows/docker_build_next_gen.yml",
+    ]
+
+env:
+  IMAGE_NAME: pantheon
+  VERSION: mmdet3.1.0_next_gen_20250311
+  FOLDER: next_gen
+  DOCKERFILE: Dockerfile
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2.1.0
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    - name: Delete huge unnecessary tools folder
+      run: rm -rf /opt/hostedtoolcache
+    - name: Build Docker images
+      run: docker build -f ${{ env.FOLDER }}/${{ env.DOCKERFILE }} -t saz0568/zelos-image:${{ env.IMAGE_NAME }}-${{ env.VERSION }} .
+    - name: Push Docker images
+      run: docker push saz0568/zelos-image:${{ env.IMAGE_NAME }}-${{ env.VERSION }}
+  publish:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.pull_request.merged == true }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2.1.0
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    - name: Delete huge unnecessary tools folder
+      run: rm -rf /opt/hostedtoolcache
+    - name: Pull Docker image from DockerHub
+      run: docker pull saz0568/zelos-image:${{ env.IMAGE_NAME }}-${{ env.VERSION }}
+    - name: Log in to zelos Harbor
+      run: echo "${{ secrets.HARBOR_PASSWORD }}" | docker login harbor.zelostech.com.cn:5443 --username=${{ secrets.HARBOR_USERNAME }} --password-stdin
+    - name: Tag Harbor images
+      run: docker tag saz0568/zelos-image:${{ env.IMAGE_NAME }}-${{ env.VERSION }} harbor.zelostech.com.cn:5443/devops/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+    - name: Push Harbor images
+      run: docker push harbor.zelostech.com.cn:5443/devops/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
