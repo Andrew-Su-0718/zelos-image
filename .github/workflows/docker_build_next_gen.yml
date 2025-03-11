@@ -1,4 +1,4 @@
-name: CI(largemodel-yolo_world)
+name: CI(next_gen-----mmdet3.1.0)
 
 on:
   push:
