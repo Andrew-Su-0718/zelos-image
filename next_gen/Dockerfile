@@ -28,7 +28,13 @@ ARG CUDA="12.2"
 ARG MMCV="2.0.1"
 RUN ["/bin/bash", "-c", "pip install openmim"]
 RUN ["/bin/bash", "-c", "mim install mmengine"]
-RUN ["/bin/bash", "-c", "mim install mmcv==${MMCV}"]
+
+# Install mmcv
+RUN git clone --depth 1 --branch v2.0.1 https://github.com/open-mmlab/mmcv.git /mmcv \
+    && cd /mmcv \
+    && pip install -r requirements/optional.txt \
+    && pip install -e . -v
+# RUN ["/bin/bash", "-c", "mim install mmcv==${MMCV}"]
 
 # Install MMDetection
 RUN git clone --depth 1 --branch v3.1.0 https://github.com/open-mmlab/mmdetection.git /mmdetection \
