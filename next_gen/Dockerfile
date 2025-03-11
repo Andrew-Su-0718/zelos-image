@@ -54,6 +54,6 @@ RUN pip install -r requirements.txt
 RUN pip install --no-cache-dir -e .
 
 # Install MMPretrain
-RUN git clone --depth 1 --branch v1.1.0 https://github.com/open-mmlab/mmpretrain.git /mmpretrain
+RUN git clone --depth 1 --branch v1.2.0 https://github.com/open-mmlab/mmpretrain.git /mmpretrain
 WORKDIR /mmpretrain
 RUN mim install --no-cache-dir -e .
