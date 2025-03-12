@@ -1,4 +1,4 @@
-FROM silvesterhsu/k8s:next_gen_1.0.0
+FROM silvesterhsu/k8s:next_gen_v1.0.0
 # FROM harbor.zelostech.com.cn:5443/perception/pantheon:next_gen_v1.0.0
 
 ARG PYTORCH="2.5.1"

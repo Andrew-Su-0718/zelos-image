@@ -1,4 +1,4 @@
-FROM silvesterhsu/k8s:next_gen_1.0.0
+FROM silvesterhsu/k8s:next_gen_v1.0.0
 # FROM harbor.zelostech.com.cn:5443/perception/pantheon:next_gen_v1.0.0
 
 ARG PYTORCH="2.5.1"
@@ -27,8 +27,15 @@ ARG PYTORCH="2.5.1"
 ARG CUDA="12.2"
 ARG MMCV="2.0.1"
 RUN ["/bin/bash", "-c", "pip install openmim"]
-RUN ["/bin/bash", "-c", "mim install mmengine"]
-RUN ["/bin/bash", "-c", "mim install mmcv==${MMCV}"]
+# RUN ["/bin/bash", "-c", "mim install mmengine"]
+
+# Install mmcv
+RUN pip install opencv-python-headless
+RUN git clone --depth 1 --branch v2.2.0 https://github.com/open-mmlab/mmcv.git /mmcv \
+    && cd /mmcv \
+    && pip install -r requirements/optional.txt \
+    && pip install -e . -v
+# RUN ["/bin/bash", "-c", "mim install mmcv==${MMCV}"]
 
 # Install MMDetection
 RUN git clone --depth 1 --branch v3.1.0 https://github.com/open-mmlab/mmdetection.git /mmdetection \
@@ -47,6 +54,6 @@ RUN pip install -r requirements.txt
 RUN pip install --no-cache-dir -e .
 
 # Install MMPretrain
-RUN git clone --depth 1 --branch v1.1.0 https://github.com/open-mmlab/mmpretrain.git /mmpretrain
+RUN git clone --depth 1 --branch v1.2.0 https://github.com/open-mmlab/mmpretrain.git /mmpretrain
 WORKDIR /mmpretrain
 RUN mim install --no-cache-dir -e .
