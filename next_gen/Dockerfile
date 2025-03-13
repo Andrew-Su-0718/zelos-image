@@ -31,24 +31,24 @@ RUN ["/bin/bash", "-c", "pip install openmim"]
 
 # Install mmcv
 RUN pip install opencv-python-headless
-RUN git clone --depth 1 --branch v2.2.0 https://github.com/open-mmlab/mmcv.git /mmcv \
+RUN git clone --depth 1 --branch v2.1.0 https://github.com/open-mmlab/mmcv.git /mmcv \
     && cd /mmcv \
     && pip install -r requirements/optional.txt \
     && pip install -e . -v
 # RUN ["/bin/bash", "-c", "mim install mmcv==${MMCV}"]
 
 # Install MMDetection
-RUN git clone --depth 1 --branch v3.1.0 https://github.com/open-mmlab/mmdetection.git /mmdetection \
+RUN git clone --depth 1 --branch v3.3.0 https://github.com/open-mmlab/mmdetection.git /mmdetection \
     && cd /mmdetection \
     && pip install --no-cache-dir -e .
 
 # Install MMDetection3D
-RUN git clone --depth 1 --branch v1.3.0 https://github.com/open-mmlab/mmdetection3d.git /mmdetection3d \
+RUN git clone --depth 1 --branch v1.4.0 https://github.com/open-mmlab/mmdetection3d.git /mmdetection3d \
     && cd /mmdetection3d \
     && pip install --no-cache-dir -e .
 
 # Install MMSegmentation
-RUN git clone --depth 1 --branch v1.1.1 https://github.com/open-mmlab/mmsegmentation.git /mmsegmentation
+RUN git clone --depth 1 --branch v1.2.2 https://github.com/open-mmlab/mmsegmentation.git /mmsegmentation
 WORKDIR /mmsegmentation
 RUN pip install -r requirements.txt
 RUN pip install --no-cache-dir -e .
