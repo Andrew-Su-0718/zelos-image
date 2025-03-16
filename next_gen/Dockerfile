@@ -155,6 +155,7 @@ COPY --chown=${NB_USER}:users --chmod=755 next_gen/s6/ /etc
 
 # s6 - 01-copy-tmp-home
 RUN mkdir -p /tmp_home \
+ && rm -rf ${HOME}/.cache \
  && cp -r ${HOME} /tmp_home
 
 # generate jupyter config
