@@ -1,0 +1,35 @@
+#!/command/with-contenv bash
+CONTENT="#!/bin/bash\n\nssh ${NB_USER}@${SSH_HOST} -p ${SSH_PORT} -i id_rsa"
+
+# check if /home/${NB_USER}/.ssh/id_rsa exists
+if [ ! -f /home/${NB_USER}/.ssh/id_rsa ]; then
+    ssh-keygen -t rsa -N "" -f /home/${NB_USER}/.ssh/id_rsa
+    echo "SSH key pair created at /home/${NB_USER}/.ssh/id_rsa"
+    cat /home/${NB_USER}/.ssh/id_rsa.pub >> /home/${NB_USER}/.ssh/authorized_keys
+fi
+
+# check if /home/${NB_USER}/ssh-tool exists
+if [ ! -d /home/${NB_USER}/ssh-tool ]; then
+    mkdir -p /home/${NB_USER}/ssh-tool
+fi
+
+# fix ssh permission
+chown ${NB_USER}:users /home/${NB_USER}
+chmod 755 /home/${NB_USER}
+chmod 700 /home/${NB_USER}/.ssh
+chmod 600 /home/${NB_USER}/.ssh/authorized_keys
+
+# force to update ssh config
+cp /home/${NB_USER}/.ssh/id_rsa /home/${NB_USER}/ssh-tool
+
+# force to update ssh connection script
+echo -e ${CONTENT} > /home/${NB_USER}/ssh-tool/connect.sh
+chmod +x /home/${NB_USER}/ssh-tool/connect.sh
+
+# pack ssh-tool
+rm -f /home/${NB_USER}/ssh-tool/ssh-tool.tar.gz
+tar -czvf /home/${NB_USER}/ssh-tool.tar.gz -C /home/${NB_USER} ssh-tool
+mv /home/${NB_USER}/ssh-tool.tar.gz /home/${NB_USER}/ssh-tool
+
+# start ssh service
+sudo service ssh start
