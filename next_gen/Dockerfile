@@ -6,10 +6,10 @@ ARG TARGETARCH=amd64
 #
 
 # common environemnt variables
-ENV NB_USER jovyan
-ENV NB_UID 1000
+#ENV NB_USER jovyan
+#ENV NB_UID 1000
 ENV NB_PREFIX /
-ENV HOME /home/$NB_USER
+ENV HOME /root
 ENV SHELL /bin/bash
 
 # args - software versions
@@ -57,7 +57,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     openssh-server \
     python3.10-venv \
     rsync \
-    software-properties-common \
     sudo \
     unzip \
     vim \
@@ -68,15 +67,15 @@ RUN export DEBIAN_FRONTEND=noninteractive \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
-RUN echo 'root:ShARC' | chpasswd && \
- echo "jovyan ALL=NOPASSWD: /usr/sbin/service ssh start" >> /etc/sudoers && \
- echo "jovyan ALL=NOPASSWD: /usr/sbin/service ssh restart" >> /etc/sudoers && \
- echo "jovyan ALL=NOPASSWD: /usr/sbin/service ssh stop" >> /etc/sudoers && \
- echo "jovyan ALL=NOPASSWD: /usr/sbin/service ssh status" >> /etc/sudoers && \
- echo "jovyan ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
- echo "jovyan:x:1337:" >> /etc/group && \
- sed -i "s/#PermitRootLogin prohibit-password/PermitRootLogin yes/" /etc/ssh/sshd_config && \
- sed -i "s/#PasswordAuthentication yes/PasswordAuthentication no/" /etc/ssh/sshd_config
+# RUN echo 'root:ShARC' | chpasswd && \
+#  echo "jovyan ALL=NOPASSWD: /usr/sbin/service ssh start" >> /etc/sudoers && \
+#  echo "jovyan ALL=NOPASSWD: /usr/sbin/service ssh restart" >> /etc/sudoers && \
+#  echo "jovyan ALL=NOPASSWD: /usr/sbin/service ssh stop" >> /etc/sudoers && \
+#  echo "jovyan ALL=NOPASSWD: /usr/sbin/service ssh status" >> /etc/sudoers && \
+#  echo "jovyan ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && \
+#  echo "jovyan:x:1337:" >> /etc/group && \
+#  sed -i "s/#PermitRootLogin prohibit-password/PermitRootLogin yes/" /etc/ssh/sshd_config && \
+#  sed -i "s/#PasswordAuthentication yes/PasswordAuthentication no/" /etc/ssh/sshd_config
 
 # install - s6 overlay
 RUN case "${TARGETARCH}" in \
@@ -105,11 +104,11 @@ RUN curl -fsSL "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/${TARGETA
  && rm /tmp/kubectl.sha256 \
  && chmod +x /usr/local/bin/kubectl
 
-# create user and set required ownership
-RUN useradd -M -s /bin/bash -N -u ${NB_UID} ${NB_USER} \
- && mkdir -p ${HOME} \
- && chown -R ${NB_USER}:users ${HOME} \
- && chown -R ${NB_USER}:users /usr/local/bin
+# # create user and set required ownership
+# RUN useradd -M -s /bin/bash -N -u ${NB_UID} ${NB_USER} \
+#  && mkdir -p ${HOME} \
+#  && chown -R ${NB_USER}:users ${HOME} \
+#  && chown -R ${NB_USER}:users /usr/local/bin
 
 # set locale configs
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
@@ -118,11 +117,11 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 
-USER $NB_UID
+# USER $NB_UID
 
 ENTRYPOINT ["/init"]
 
-USER root
+# USER root
 
 # args - software versions
 ARG JUPYTERLAB_VERSION=4.3.5
@@ -156,14 +155,13 @@ COPY --chown=${NB_USER}:users --chmod=755 next_gen/s6/ /etc
 
 # s6 - 01-copy-tmp-home
 RUN mkdir -p /tmp_home \
- && cp -r ${HOME} /tmp_home \
- && chown -R ${NB_USER}:users /tmp_home
+ && cp -r ${HOME} /tmp_home
 
 # generate jupyter config
 RUN source /opt/jupyter/bin/activate \
  && jupyter notebook --generate-config \
  && jupyter lab --generate-config \
  && jupyter labextension disable "@jupyterlab/apputils-extension:announcements"
-USER $NB_UID
+# USER $NB_UID
 
 EXPOSE 8888
