@@ -57,7 +57,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     openssh-server \
     python3.10-venv \
     rsync \
-    \ # software-properties-common \
     sudo \
     unzip \
     vim \
