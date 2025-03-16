@@ -1,0 +1,3 @@
+#!/command/with-contenv bash
+# clean jupyter lab config
+# rm -rf /home/${NB_USER}/.jupyter/*
