@@ -19,7 +19,7 @@ ENV TORCH_CUDA_ARCH_LIST="7.0 7.5 8.0 8.6 8.9+PTX" \
 # Install MMCV
 ARG PYTORCH="2.5.1"
 ARG CUDA="12.2"
-ARG MMCV="2.0.1"
+ARG MMCV="2.1.0"
 RUN ["/bin/bash", "-c", "pip install openmim"]
 # RUN ["/bin/bash", "-c", "mim install mmengine"]
 
@@ -58,5 +58,10 @@ COPY next_gen_mmdet/requirements-extra.txt /next_gen/
 RUN pip install datasets=2.19.1 --no-cache-dir \
  && pip install -r requirements-extra.txt --no-cache-dir
 
+RUN apt-get -yq update \
+ && apt -yq install --no-install-recommends software-properties-common \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/*
+
 WORKDIR ${HOME}
-USER $NB_UID
+# USER $NB_UID
