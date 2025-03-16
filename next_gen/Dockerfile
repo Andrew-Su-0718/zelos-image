@@ -155,8 +155,7 @@ COPY --chown=${NB_USER}:users --chmod=755 next_gen/s6/ /etc
 
 # s6 - 01-copy-tmp-home
 RUN mkdir -p /tmp_home \
- && cp -r ${HOME} /tmp_home \
- && chown -R ${NB_USER}:users /tmp_home
+ && cp -r ${HOME} /tmp_home
 
 # generate jupyter config
 RUN source /opt/jupyter/bin/activate \
