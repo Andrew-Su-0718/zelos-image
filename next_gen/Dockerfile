@@ -9,7 +9,7 @@ ARG TARGETARCH=amd64
 #ENV NB_USER jovyan
 #ENV NB_UID 1000
 ENV NB_PREFIX /
-ENV HOME /home/$NB_USER
+ENV HOME /root
 ENV SHELL /bin/bash
 
 # args - software versions
