@@ -1,2 +1,2 @@
 #!/command/with-contenv bash
-cp -r -n /tmp_home/* /home/
+cp -r -n /tmp_home/* /root/
