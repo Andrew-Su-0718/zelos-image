@@ -55,13 +55,14 @@ RUN mim install --no-cache-dir -e .
 # Install extra dependencies
 WORKDIR /next_gen
 COPY next_gen_mmdet/requirements-extra.txt /next_gen/
-RUN pip install datasets=2.19.1 --no-cache-dir \
+RUN pip install datasets==2.19.1 --no-cache-dir \
  && pip install -r requirements-extra.txt --no-cache-dir
 
-RUN apt-get -yq update \
- && apt -yq install --no-install-recommends software-properties-common \
- && apt-get clean \
- && rm -rf /var/lib/apt/lists/*
+# (Warning) Jupyter official Dockerfile requires software-properties-common packages. But this would install python dist-package, which may have conflicts with mm installation
+# RUN apt-get -yq update \
+#  && apt -yq install --no-install-recommends software-properties-common \
+#  && apt-get clean \
+#  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR ${HOME}
 # USER $NB_UID
