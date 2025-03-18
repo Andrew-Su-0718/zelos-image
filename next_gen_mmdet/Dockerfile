@@ -37,8 +37,9 @@ RUN git clone --depth 1 --branch v3.3.0 https://github.com/open-mmlab/mmdetectio
     && pip install --no-cache-dir -e .
 
 # Install MMDetection3D
-RUN git clone --depth 1 --branch v1.4.0 https://github.com/open-mmlab/mmdetection3d.git /mmdetection3d \
+RUN git clone --depth 1 --branch v1.3.0 https://github.com/open-mmlab/mmdetection3d.git /mmdetection3d \
     && cd /mmdetection3d \
+    && sed -i "s/-r\srequirements\/optional.txt//g" requirements.txt \
     && pip install --no-cache-dir -e .
 
 # Install MMSegmentation
