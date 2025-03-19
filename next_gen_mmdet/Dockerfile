@@ -18,7 +18,7 @@ ENV TORCH_CUDA_ARCH_LIST="7.0 7.5 8.0 8.6 8.9+PTX" \
 
 # Install MMCV
 ARG PYTORCH="2.5.1"
-ARG CUDA="12.2"
+ARG CUDA="12.1"
 ARG MMCV="2.1.0"
 RUN ["/bin/bash", "-c", "pip install openmim"]
 # RUN ["/bin/bash", "-c", "mim install mmengine"]
@@ -32,18 +32,17 @@ RUN git clone --depth 1 --branch v2.1.0 https://github.com/open-mmlab/mmcv.git /
 # RUN ["/bin/bash", "-c", "mim install mmcv==${MMCV}"]
 
 # Install MMDetection
-RUN git clone --depth 1 --branch v3.3.0 https://github.com/open-mmlab/mmdetection.git /mmdetection \
+RUN git clone --depth 1 --branch v3.1.0 https://github.com/open-mmlab/mmdetection.git /mmdetection \
     && cd /mmdetection \
     && pip install --no-cache-dir -e .
 
 # Install MMDetection3D
 RUN git clone --depth 1 --branch v1.3.0 https://github.com/open-mmlab/mmdetection3d.git /mmdetection3d \
     && cd /mmdetection3d \
-    && sed -i "s/-r\srequirements\/optional.txt//g" requirements.txt \
     && pip install --no-cache-dir -e .
 
 # Install MMSegmentation
-RUN git clone --depth 1 --branch v1.2.2 https://github.com/open-mmlab/mmsegmentation.git /mmsegmentation
+RUN git clone --depth 1 --branch v1.1.1 https://github.com/open-mmlab/mmsegmentation.git /mmsegmentation
 WORKDIR /mmsegmentation
 RUN pip install -r requirements.txt
 RUN pip install --no-cache-dir -e .
