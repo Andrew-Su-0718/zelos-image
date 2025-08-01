@@ -25,9 +25,9 @@ on:
 #  IMAGE_DEST: harbor.zelostech.com.cn:5443/devops/nvidia/cuda:11.8.0-cudnn8-devel-ubuntu20.04
 env:
   VERSION: 1.0.0
-  IMAGE_SRC: docker.io/apache/camel-k:2.5.1
-  IMAGE_INTERMEDIUM: saz0568/zelos-image:apache-camel-k-2.5.1
-  IMAGE_DEST: harbor.zelostech.com.cn:5443/devops/apache/camel:2.5.1
+  IMAGE_SRC: juicedata/mount:ce-v1.3.0
+  IMAGE_INTERMEDIUM: saz0568/zelos-image:juicedata-mount-ce-v1.3.0
+  IMAGE_DEST: harbor-volc.zelostech.com.cn:5443/devops/juicedata/mount:ce-v1.3.0
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -62,7 +62,7 @@ jobs:
     - name: Pull Docker image from DockerHub
       run: docker pull ${{ env.IMAGE_INTERMEDIUM }}
     - name: Log in to zelos Harbor
-      run: echo "${{ secrets.HARBOR_PASSWORD }}" | docker login harbor.zelostech.com.cn:5443 --username=${{ secrets.HARBOR_USERNAME }} --password-stdin
+      run: echo "${{ secrets.HARBOR_PASSWORD }}" | docker login harbor-volc.zelostech.com.cn:5443 --username=${{ secrets.HARBOR_USERNAME }} --password-stdin
     - name: Tag Harbor images
       run: docker tag ${{ env.IMAGE_INTERMEDIUM }} ${{ env.IMAGE_DEST }}
     - name: Push Harbor images
