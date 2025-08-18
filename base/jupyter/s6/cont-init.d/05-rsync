@@ -1,2 +1,2 @@
 #!/command/with-contenv bash
-rsync --daemon
+sudo rsync --daemon
