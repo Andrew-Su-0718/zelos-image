@@ -52,7 +52,7 @@ jobs:
     - name: Pull Docker image from DockerHub
       run: docker pull saz0568/zelos-image:${{ env.IMAGE_NAME }}-${{ env.VERSION }}
     - name: Log in to zelos Harbor
-      run: echo "${{ secrets.HARBOR_PASSWORD }}" | docker login harbor.zelostech.com.cn:5443 --username=${{ secrets.HARBOR_USERNAME }} --password-stdin
+      run: echo "${{ secrets.HARBOR_PASSWORD }}" | docker login harbor-volc.zelostech.com.cn:5443 --username=${{ secrets.HARBOR_USERNAME }} --password-stdin
     - name: Tag Harbor images
       run: docker tag saz0568/zelos-image:${{ env.IMAGE_NAME }}-${{ env.VERSION }} harbor-volc.zelostech.com.cn:5443/devops/jupyter/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
     - name: Push Harbor images
