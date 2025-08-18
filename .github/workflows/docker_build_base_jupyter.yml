@@ -56,4 +56,4 @@ jobs:
     - name: Tag Harbor images
       run: docker tag saz0568/zelos-image:${{ env.IMAGE_NAME }}-${{ env.VERSION }} harbor-volc.zelostech.com.cn:5443/devops/jupyter/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
     - name: Push Harbor images
-      run: docker push harbor.zelostech.com.cn:5443/devops/jupyter/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+      run: docker push harbor-volc.zelostech.com.cn:5443/devops/jupyter/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
