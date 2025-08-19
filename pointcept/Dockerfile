@@ -18,13 +18,12 @@ RUN conda create -y -n pointcept python=3.10 -y
 SHELL ["conda", "run", "-n", "pointcept", "/bin/bash", "-c"]
 
 RUN pip3 install torch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 --index-url https://download.pytorch.org/whl/cu118
-RUN pip3 install ninja h5py pyyaml sharedarray tensorboard tensorboardx yapf 
+RUN pip3 install numpy==1.24.0 ninja h5py pyyaml sharedarray tensorboard tensorboardx yapf 
 RUN pip3 install addict einops scipy plyfile termcolor timm open3d wandb
 RUN pip3 install opencv-python numba easydict prettytable
 RUN pip3 install spconv-cu118 flash-attn==2.6.3 torch-geometric
 RUN pip3 install torch_scatter --no-build-isolation
 RUN pip install torch-cluster torch_sparse -f https://data.pyg.org/whl/torch-2.1.0+cu118.html
-RUN pip3 install numpy==1.24.0
 
 # cd lidarseg_offline/PointTransformerV3/Pointcept/libs/pointops
 # python setup.py install
