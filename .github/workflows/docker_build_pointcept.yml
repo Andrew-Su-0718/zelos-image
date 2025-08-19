@@ -34,7 +34,7 @@ jobs:
     - name: Delete huge unnecessary tools folder
       run: rm -rf /opt/hostedtoolcache
     - name: Build Docker images
-      run: docker build -f base/jupyter/${{ env.DOCKERFILE }} -t saz0568/zelos-image:${{ env.IMAGE_NAME }}-${{ env.VERSION }} .
+      run: docker build -f pointcept/${{ env.DOCKERFILE }} -t saz0568/zelos-image:${{ env.IMAGE_NAME }}-${{ env.VERSION }} .
     - name: Push Docker images
       run: docker push saz0568/zelos-image:${{ env.IMAGE_NAME }}-${{ env.VERSION }}
   publish:
