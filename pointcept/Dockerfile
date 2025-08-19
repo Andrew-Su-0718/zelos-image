@@ -1,5 +1,5 @@
 # ARG BASE_IMG=harbor-volc.zelostech.com.cn:5443/devops/jupyter/jupyter:1.8.0-py3.12-cu12.1.1-ubuntu22.04
-ARG BASE_IMG=saz0568/zelos-image:jupyter-1.8.0-py3.12-cu12.1.1-ubuntu22.04
+ARG BASE_IMG=saz0568/zelos-image:jupyter-1.8.0-cu11.8-ubuntu22.04
 # ARG BASE_IMG=harbor.zelostech.com.cn:5443/devops/jupyter/jupyter:1.8.0
 ARG NB_USER=jovyan
 ARG SYS_USER=root
